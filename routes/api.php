@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UsersController;
+use App\Http\Controllers\API\MsTrackingDriverController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +33,12 @@ Route::prefix('v1')->group(function () {
         Route::post('/users', [UsersController::class, 'store']);
         Route::put('/users/{id}', [UsersController::class, 'update']);
         Route::delete('/users/{id}', [UsersController::class, 'destroy']);
+
+        Route::get('/ms_tracking', [MsTrackingDriverController::class, 'index']);
+        Route::get('/ms_tracking/{id}', [MsTrackingDriverController::class, 'show']);
+        Route::post('/ms_tracking', [MsTrackingDriverController::class, 'store']);
+        Route::put('/ms_tracking/{id}', [MsTrackingDriverController::class, 'update']);
+        Route::delete('/ms_tracking/{id}', [MsTrackingDriverController::class, 'destroy']);
     });
 
 });
