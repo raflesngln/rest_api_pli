@@ -14,12 +14,18 @@ class UsersController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function index()
+    public function index(Request $request)
     {
 
-        // Retrieve a list of users
-        $users = User::all();
-        return response()->json($users);
+        // $users = User::all();
+        // $dataResp=$request()->query('page');
+        $users = User::orderBy('id', 'desc')->limit(4)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $users,
+            // 'resp' => $dataResp,
+        ], 200);
     }
 
     public function show($id)

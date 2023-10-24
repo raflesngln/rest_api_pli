@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\MsDriver;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,7 +54,7 @@ class AuthController extends Controller
         ]);
 
         // Check email
-        $user = User::where('email', $fields['email'])->first();
+        $user = MsDriver::where('email', $fields['email'])->first();
 
         // Check password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
@@ -74,11 +75,12 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
-        $user = $request->user();
 
-        return response()->json([
-            'user' => $user,
-        ]);
+        $msDriver = Auth::user(); // Retrieve the currently authenticated ms_driver
+
+            return response()->json([
+                'user' => $msDriver,
+            ]);
     }
 
     public function logout(Request $request)

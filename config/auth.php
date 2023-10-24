@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'api',
-        'passwords' => 'users',
+        'passwords' => 'ms_drivers',
     ],
 
     /*
@@ -42,7 +42,12 @@ return [
         ],
         'api' => [
             'driver' => 'sanctum', // Set the driver to 'sanctum'
-            'provider' => 'users',
+            'provider' => 'ms_drivers',
+            'hash' => false,
+        ],
+        'sanctum' => [
+            'driver' => 'sanctum', // Set the driver to 'sanctum'
+            'provider' => 'ms_drivers',
             'hash' => false,
         ],
     ],
@@ -68,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'ms_drivers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\MsDriver::class,
         ],
 
         // 'users' => [
@@ -98,6 +107,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'ms_drivers' => [
+            'provider' => 'ms_drivers',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

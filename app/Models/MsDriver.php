@@ -9,7 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class MsTrackingDriver extends Model
+
+class MsDriver extends Model
 {
     use HasFactory,HasApiTokens, HasFactory, Notifiable;
 
@@ -19,9 +20,19 @@ class MsTrackingDriver extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'index',
-        'title',
-        'deskripsi',
+        'id',
+        'driver_no',
+        'driver_name',
+        'driver_contact_number1',
+        'driver_contact_number2',
+        'is_active',
+        'is_deleted',
+        'ip',
+        'create_by',
+        'vendor_id',
+        'email',
+        'password',
+
     ];
 
     /**
@@ -39,3 +50,5 @@ class MsTrackingDriver extends Model
     protected $casts = [
     ];
 }
+
+
