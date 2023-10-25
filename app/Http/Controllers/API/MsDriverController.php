@@ -37,6 +37,7 @@ class MsDriverController extends Controller
 
     public function show($id)
     {
+
         // Retrieve a single user by ID
         $resp = MsDriver::find($id);
 

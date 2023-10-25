@@ -7,6 +7,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UsersController;
 use App\Http\Controllers\API\MsDriverController;
 use App\Http\Controllers\API\MsTrackingTruckController;
+use App\Http\Controllers\API\JobsDispacthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,6 +47,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/ms_tracking', [MsTrackingTruckController::class, 'store']);
         Route::put('/ms_tracking/{id}', [MsTrackingTruckController::class, 'update']);
         Route::delete('/ms_tracking/{id}', [MsTrackingTruckController::class, 'destroy']);
+
+        Route::get('/job_dispacth', [JobsDispacthController::class, 'index']);
+        Route::get('/job_dispacth/{id}', [JobsDispacthController::class, 'show']);
     });
 
 });

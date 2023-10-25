@@ -30,6 +30,10 @@ class UsersController extends Controller
 
     public function show($id)
     {
+        // if ($user->tokenCan('user:update')) {
+        //     //
+        // }
+
         // Retrieve a single user by ID
         $user = User::find($id);
 
