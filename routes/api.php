@@ -28,6 +28,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
 
+    Route::get('/test_job', [JobsDispacthController::class, 'index_flc']);
+
+
     // Protected routes
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/users', [UsersController::class, 'index']);

@@ -16,7 +16,7 @@ class JobsDispacthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        // $this->middleware('auth:sanctum');
     }
 
     public function index_flc(Request $request)
@@ -55,16 +55,6 @@ class JobsDispacthController extends Controller
         ->offset(($page - 1) * $per_page)
         ->limit($per_page)
         ->get();
-
-
-
-    //     // Apply ordering
-    //     $query = JobsDispacth::query();
-    //     $query->orderBy($order_by, $order_direction);
-    //    // Apply pagination
-    //    $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
-
-        // return response()->json(['data'=>$items,'page'=>$page,'per_page'=>$per_page]);
         return response()->json(['data'=>$results,'page'=>$page,'per_page'=>$per_page]);
     }
     public function index_lcl(Request $request)
@@ -123,12 +113,11 @@ class JobsDispacthController extends Controller
     public function show_lcl($id)
     {
         $results = DB::table('ms_dispatch as a')
-        ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
-        ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
-        ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
+        ->leftJoin('ms_job_volume as v', 'a.id_volume', '=', 'v.id_volume')
+        ->leftJoin('ms_job as j', 'j.id_job', '=', 'v.id_job')
         ->select(
-            'd.id',
-            DB::raw('MAX(j.id_job) as id_job'),
+            DB::raw('MAX(a.id) as id'),
+            DB::raw('MAX(a.id_volume) as id_volume'),
             DB::raw('MAX(j.customer_name) as customer_name'),
             DB::raw('MAX(a.delivery_loc) as delivery_loc'),
             DB::raw('MAX(a.driver) as driver'),
@@ -136,10 +125,9 @@ class JobsDispacthController extends Controller
             DB::raw('COUNT(*) as koli')
         )
         ->where('j.moda_transport', 'TRUCK')
-        ->where('j.cargo_type', 'FCL')
-        ->where('d.id', $id)
-        ->groupBy('d.id')
-        ->limit(10)
+        ->where('j.cargo_type', 'LCL')
+        ->where('a.id', $id)
+        ->groupBy('v.id_volume')
         ->get();
         return response()->json(['data'=>$results,'id'=>$id,]);
 
