@@ -1,0 +1,14 @@
+production:
+  script:
+        - echo "Build production"
+        - $ssh $script
+  only:
+      - production
+
+
+development:
+  script:
+        - echo "Build development"
+        - $ssh_dev $script_dev
+  only:
+      - development
