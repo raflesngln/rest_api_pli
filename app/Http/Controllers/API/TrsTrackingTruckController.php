@@ -45,7 +45,7 @@ class TrsTrackingTruckController extends Controller
             return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
         $response = TrsTrackingTruckResource::collection($resp);
-        return response()->json($resp);
+        return response()->json($response);
     }
 
     public function store(Request $request)

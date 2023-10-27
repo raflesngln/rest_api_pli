@@ -86,8 +86,8 @@ class MsDriverController extends Controller
                 'driver' => $driver,
                 'message' => 'Success create data'
             ];
-
-            return response($response, 201);
+            $responses = MsDriverResource::collection($response);
+            return response($responses, 201);
         }
     }
 
@@ -101,7 +101,8 @@ class MsDriverController extends Controller
         }
 
         $resp->update($request->all());
-        return response()->json($resp);
+        $response = MsDriverResource::collection($resp);
+        return response()->json($response);
     }
 
     public function destroy($id)
