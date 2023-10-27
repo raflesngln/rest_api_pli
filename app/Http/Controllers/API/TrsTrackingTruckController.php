@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TrsTrackingTruckResource;
 use App\Models\TrsTrackingTruck;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,12 +28,11 @@ class TrsTrackingTruckController extends Controller
 
         // Apply ordering
         $query = TrsTrackingTruck::query();
-        $query->orderBy(isset($order_by)?$order_by:'id', isset($order_direction)?$order_direction:'asc');
-       // Apply pagination
-       $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
-
-        return response()->json(['data'=>$items,'page'=>$page,'per_page'=>$per_page]);
-
+        $query->orderBy(isset($order_by) ? $order_by : 'id', isset($order_direction) ? $order_direction : 'asc');
+        // Apply pagination
+        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
+        $response = TrsTrackingTruckResource::collection($items);
+        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
     public function show($id)
@@ -44,7 +44,7 @@ class TrsTrackingTruckController extends Controller
         if (!$resp) {
             return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-
+        $response = TrsTrackingTruckResource::collection($resp);
         return response()->json($resp);
     }
 
@@ -61,28 +61,26 @@ class TrsTrackingTruckController extends Controller
 
         if ($validator->fails()) {
             echo $validator->messages()->toJson();
-        }else{
+        } else {
             $row = TrsTrackingTruck::create([
                 'id_dispacth' => $request['id_dispacth'],
                 'id_tracking' => $request['id_tracking'],
-                'tracking_date' =>$request['tracking_date'],
-                'title' =>$request['title'],
-                'description' =>$request['description'],
-                'attachment' =>$request['attachment'],
-                'is_done' =>$request['is_done'],
-                'is_active' =>$request['is_active'],
+                'tracking_date' => $request['tracking_date'],
+                'title' => $request['title'],
+                'description' => $request['description'],
+                'attachment' => $request['attachment'],
+                'is_done' => $request['is_done'],
+                'is_active' => $request['is_active'],
             ]);
 
 
             $response = [
                 'data' => $row,
-                'message' =>'Success create data'
+                'message' => 'Success create data'
             ];
-
-            return response($response, 201);
+            $responses = TrsTrackingTruckResource::collection($response);
+            return response($responses, 201);
         }
-
-
     }
 
     public function update(Request $request, $id)
@@ -95,7 +93,8 @@ class TrsTrackingTruckController extends Controller
         }
 
         $resp->update($request->all());
-        return response()->json($resp);
+        $responses = TrsTrackingTruckResource::collection($resp);
+        return response()->json($responses);
     }
 
     public function destroy($id)

@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MsTrackingTruckResource;
 use App\Models\MsTrackingTruck;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,11 +30,12 @@ class MsTrackingTruckController extends Controller
 
         // Apply ordering
         $query = MsTrackingTruck::query();
-        $query->orderBy(isset($order_by)?$order_by:'id', isset($order_direction)?$order_direction:'asc');
-       // Apply pagination
-       $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
+        $query->orderBy(isset($order_by) ? $order_by : 'id', isset($order_direction) ? $order_direction : 'asc');
+        // Apply pagination
+        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
 
-        return response()->json(['data'=>$items,'page'=>$page,'per_page'=>$per_page]);
+        $response = MsTrackingTruckResource::collection($items);
+        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
     public function show($id)
@@ -42,7 +46,7 @@ class MsTrackingTruckController extends Controller
         if (!$resp) {
             return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-
+        $response = MsTrackingTruckResource::collection($resp);
         return response()->json($resp);
     }
 
@@ -57,23 +61,21 @@ class MsTrackingTruckController extends Controller
 
         if ($validator->fails()) {
             echo $validator->messages()->toJson();
-        }else{
+        } else {
             $driver = MsTrackingTruck::create([
                 'sorting' => $request['sorting'],
                 'title' => $request['title'],
-                'description' =>$request['description'],
+                'description' => $request['description'],
             ]);
 
 
             $response = [
                 'driver' => $driver,
-                'message' =>'Success create data'
+                'message' => 'Success create data'
             ];
-
-            return response($response, 201);
+            $responses = MsTrackingTruckResource::collection($response);
+            return response($responses, 201);
         }
-
-
     }
 
     public function update(Request $request, $id)
@@ -86,9 +88,9 @@ class MsTrackingTruckController extends Controller
             ->get();
 
 
-        if(count($check) > 0){
-            return response()->json(['message'=>'Sudah ada yang punya index ini']);
-        }else{
+        if (count($check) > 0) {
+            return response()->json(['message' => 'Sudah ada yang punya index ini']);
+        } else {
             // Update an existing user
             $resp = MsTrackingTruck::find($id);
 
@@ -97,7 +99,8 @@ class MsTrackingTruckController extends Controller
             }
 
             $resp->update($request->all());
-            return response()->json($resp);
+            $response = MsTrackingTruckResource::collection($resp);
+            return response()->json($response);
         }
     }
 

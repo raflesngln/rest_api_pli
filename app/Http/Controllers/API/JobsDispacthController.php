@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\JobDispatchResource;
 
 class JobsDispacthController extends Controller
 {
@@ -65,7 +66,8 @@ class JobsDispacthController extends Controller
                 ->limit($per_page)
                 ->get();
         }
-        return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page]);
+        $response = JobDispatchResource::collection($results);
+        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
     public function index_lcl(Request $request)
     {
@@ -106,6 +108,7 @@ class JobsDispacthController extends Controller
 
     public function show_fcl($id)
     {
+
         $results = DB::table('ms_dispatch as a')
             ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
             ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
@@ -125,7 +128,9 @@ class JobsDispacthController extends Controller
             ->groupBy('d.id')
             ->limit(10)
             ->get();
-        return response()->json(['data' => $results, 'id' => $id,]);
+
+        $response = JobDispatchResource::collection($results);
+        return response()->json(['data' => $response, 'id' => $id,]);
     }
     public function show_lcl($id)
     {
@@ -146,7 +151,8 @@ class JobsDispacthController extends Controller
             ->where('a.id', $id)
             ->groupBy('v.id_volume')
             ->get();
-        return response()->json(['data' => $results, 'id' => $id,]);
+        $response = JobDispatchResource::collection($results);
+        return response()->json(['data' => $response, 'id' => $id,]);
     }
     // public function show($id)
     // {
