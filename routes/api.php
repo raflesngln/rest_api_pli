@@ -8,6 +8,7 @@ use App\Http\Controllers\API\UsersController;
 use App\Http\Controllers\API\MsDriverController;
 use App\Http\Controllers\API\MsTrackingTruckController;
 use App\Http\Controllers\API\JobsDispacthController;
+use App\Http\Controllers\API\TrsTrackingTruckController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -55,6 +56,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/job_dispacth_lcl', [JobsDispacthController::class, 'index_lcl']);
         Route::get('/job_dispacth_fcl/{id}', [JobsDispacthController::class, 'show_fcl']);
         Route::get('/job_dispacth_lcl/{id}', [JobsDispacthController::class, 'show_lcl']);
+
+        Route::get('/trs_truck_tracking', [TrsTrackingTruckController::class, 'index']);
+        Route::get('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'show']);
+        Route::post('/trs_truck_tracking', [TrsTrackingTruckController::class, 'store']);
+        Route::put('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'update']);
+        Route::delete('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'destroy']);
     });
 
 });

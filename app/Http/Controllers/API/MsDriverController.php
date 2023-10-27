@@ -28,7 +28,7 @@ class MsDriverController extends Controller
 
         // Apply ordering
         $query = MsDriver::query();
-        $query->orderBy($order_by, $order_direction);
+        $query->orderBy(isset($order_by)?$order_by:'id', isset($order_direction)?$order_direction:'asc');
        // Apply pagination
        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
 

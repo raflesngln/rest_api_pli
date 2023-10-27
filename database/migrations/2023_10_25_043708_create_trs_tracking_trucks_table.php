@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('trs_tracking_trucks', function (Blueprint $table) {
             $table->id();
-            $table->integer('tracking_date');
+            $table->bigInteger('id_dispacth');
+            $table->bigInteger('id_tracking');
+            $table->imestamp('tracking_date')->nullable();
             $table->string('title');
-            $table->string('qty');
-            $table->string('PIC');
-            $table->string('estimate_pickup');
             $table->string('description');
-            $table->string('attachment')->nullable();
+            $table->text('attachment')->nullable();
+            $table->enum('is_done',array('0', '1'))->default('0');
             $table->enum('is_active',array('0', '1'))->default('1');
             $table->timestamps();
         });

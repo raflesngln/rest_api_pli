@@ -27,7 +27,7 @@ class MsTrackingTruckController extends Controller
 
         // Apply ordering
         $query = MsTrackingTruck::query();
-        $query->orderBy($order_by, $order_direction);
+        $query->orderBy(isset($order_by)?$order_by:'id', isset($order_direction)?$order_direction:'asc');
        // Apply pagination
        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
 
