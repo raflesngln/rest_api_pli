@@ -101,4 +101,36 @@ class AuthController extends Controller
         }
         return response()->json(['message' => 'User not found'], 404);
     }
+    /**
+     * @unauthenticated
+     */
+    public function login_v2(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error', $validator->errors(), 422);
+        }
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return $this->sendError('Login Failed.', ['email' => 'Cannot Find Email'], 400);
+        }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return $this->sendError('Login Failed.', ['password' => 'Wrong Password'], 400);
+        }
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+            $success['token'] = $user->createToken('Token')->plainTextToken;
+            $success['name'] = $user->name;
+            return $this->sendResponse($success, 'User login successful.');
+        } else {
+            return $this->sendError('Unauthorized.', ['error' => 'Unauthorized'], 401);
+        }
+    }
 }

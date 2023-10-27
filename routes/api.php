@@ -25,6 +25,7 @@ Route::prefix('v1')->group(function () {
     // Public routes
     // Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login_v2', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
 
@@ -56,7 +57,4 @@ Route::prefix('v1')->group(function () {
         Route::get('/job_dispacth_fcl/{id}', [JobsDispacthController::class, 'show_fcl']);
         Route::get('/job_dispacth_lcl/{id}', [JobsDispacthController::class, 'show_lcl']);
     });
-
 });
-
-
