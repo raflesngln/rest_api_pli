@@ -102,8 +102,9 @@ class JobsDispacthController extends Controller
                 ->offset(($page - 1) * $per_page)
                 ->limit($per_page)
                 ->get();
+            $response = JobDispatchResource::collection($results);
         }
-        return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page]);
+        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
     public function show_fcl($id)
