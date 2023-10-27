@@ -14,7 +14,9 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
+        /**
+         * @unauthenticated
+         */
         $validator = Validator::make($request->all(), [
             'name'     => 'required|string|max:255|min:2',
             'email'    => 'required|string|email|max:255|unique:users',
@@ -23,7 +25,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             echo $validator->messages()->toJson();
-        }else{
+        } else {
 
             $user = User::create([
                 'name' => $request['name'],
@@ -39,13 +41,15 @@ class AuthController extends Controller
             ];
 
             return response($response, 201);
-             //return JSON process insert failed
+            //return JSON process insert failed
             //  return response()->json([
             //     'success' => false,
             // ], 409);
         }
     }
-
+    /**
+     * @unauthenticated
+     */
     public function login(Request $request)
     {
         $fields = $request->validate([
@@ -78,11 +82,13 @@ class AuthController extends Controller
 
         $msDriver = Auth::user(); // Retrieve the currently authenticated ms_driver
 
-            return response()->json([
-                'user' => $msDriver,
-            ]);
+        return response()->json([
+            'user' => $msDriver,
+        ]);
     }
-
+    /**
+     * @unauthenticated
+     */
     public function logout(Request $request)
     {
         $user = Auth::user();
@@ -95,5 +101,4 @@ class AuthController extends Controller
         }
         return response()->json(['message' => 'User not found'], 404);
     }
-
 }
