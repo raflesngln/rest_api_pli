@@ -51,8 +51,8 @@ class TrsTrackingTruckController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_dispacth'     => 'required',
-            'id_tracking'    => 'required',
+            'id_dispacth'     => 'required|string',
+            'id_tracking'    => 'required|int',
             'tracking_date'    => 'required',
             'title'    => 'required|string',
             'description'    => 'required|string',
