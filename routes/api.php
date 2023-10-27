@@ -29,7 +29,6 @@ Route::prefix('v1')->group(function () {
     // Public routes
     // Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/login_v2', [AuthController::class, 'login_v2']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
 
