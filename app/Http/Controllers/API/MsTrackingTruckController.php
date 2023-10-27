@@ -46,8 +46,7 @@ class MsTrackingTruckController extends Controller
         if (!$resp) {
             return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-        $response = MsTrackingTruckResource::collection($resp);
-        return response()->json($response);
+        return response()->json($resp);
     }
 
     public function store(Request $request)
@@ -99,8 +98,7 @@ class MsTrackingTruckController extends Controller
             }
 
             $resp->update($request->all());
-            $response = MsTrackingTruckResource::collection($resp);
-            return response()->json($response);
+            return response()->json($resp);
         }
     }
 
