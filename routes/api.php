@@ -21,11 +21,15 @@ use App\Http\Controllers\API\TrsTrackingTruckController;
 */
 // TrsTrackingDriver
 
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 Route::prefix('v1')->group(function () {
     // Public routes
     // Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login_v2', [AuthController::class, 'login_v2']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
 
@@ -63,7 +67,4 @@ Route::prefix('v1')->group(function () {
         Route::put('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'update']);
         Route::delete('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'destroy']);
     });
-
 });
-
-
