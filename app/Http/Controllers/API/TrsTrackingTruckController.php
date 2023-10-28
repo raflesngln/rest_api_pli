@@ -39,8 +39,7 @@ class TrsTrackingTruckController extends Controller
     {
 
         // Retrieve a single user by ID
-        $resp = TrsTrackingTruck::find($id);
-
+        $resp = TrsTrackingTruck::query()->where('id', $id);
         $response = TrsTrackingTruckResource::collection($resp);
 
         if (!$response) {
