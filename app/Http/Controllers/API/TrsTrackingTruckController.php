@@ -40,13 +40,11 @@ class TrsTrackingTruckController extends Controller
 
         // Retrieve a single user by ID
         $resp = TrsTrackingTruck::find($id);
-        $response = TrsTrackingTruckResource::collection($resp);
-        $obj = json_decode(json_encode($response));
 
-        if (!$response) {
+        if (!$resp) {
             return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-        return response()->json($obj);
+        return response()->json($resp);
     }
 
     public function store(Request $request)
