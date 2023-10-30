@@ -42,7 +42,6 @@ return [
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
-
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -62,7 +61,14 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-
+        'testing' => [
+            'driver' => env('DB_CONNECTION_TESTING', 'mysql'),
+            'host' => env('DB_HOST_TESTING', '127.0.0.1'),
+            'port' => env('DB_PORT_TESTING', '3306'),
+            'database' => env('DB_DATABASE_TESTING', 'pli_tracking_test'),
+            'username' => env('DB_USERNAME_TESTING', 'attgroup'),
+            'password' => env('DB_PASSWORD_TESTING', 'att123'),
+        ],
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exceptions;
 
 use Exception;
@@ -19,6 +18,4 @@ class CustomAuthenticationException extends ExceptionHandler
     {
         return response()->json(['error' => 'Unauthorized. Invalid or missing token.'], 401);
     }
-
-    // ... Other methods and properties from the parent class
 }

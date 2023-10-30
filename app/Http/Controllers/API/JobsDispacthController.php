@@ -35,22 +35,12 @@ class JobsDispacthController extends Controller
             $order_by = $request->query('order_by');
             $order_direction = $request->query('order_direction');
 
-            // $results = DB::table('ms_dispatch as a')
-            //         ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
-            //         ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
-            //         ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
-            //         ->select('j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', DB::raw('1 as koli'))
-            //         ->where('j.moda_transport', 'TRUCK')
-            //         ->where('j.cargo_type', 'FCL')
-            //         ->groupBy('d.id')
-            //         ->limit(10)
-            //         ->get();
             $results = DB::table('ms_dispatch as a')
                 ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
                 ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
                 ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
                 ->select(
-                    'd.id',
+                    DB::raw('MAX(a.id) as id'),
                     DB::raw('MAX(j.id_job) as id_job'),
                     DB::raw('MAX(j.customer_name) as customer_name'),
                     DB::raw('MAX(a.delivery_loc) as delivery_loc'),
