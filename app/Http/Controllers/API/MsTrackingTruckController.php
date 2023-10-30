@@ -99,7 +99,7 @@ class MsTrackingTruckController extends Controller
             }
 
             $resp->update($request->all());
-            return new MsTrackingTruck($resp);
+            return response()->json($resp);
         }
     }
 

@@ -100,7 +100,7 @@ class MsDriverController extends Controller
         }
 
         $resp->update($request->all());
-        return new MsDriver($resp);
+        return response()->json($resp);
     }
 
     public function destroy($id)
