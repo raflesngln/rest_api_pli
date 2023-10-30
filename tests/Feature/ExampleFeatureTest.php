@@ -45,7 +45,7 @@ class ExampleFeatureTest extends TestCase
         ];
     }
 
-    public function testCalculate()
+    public function test_calculator_testing()
     {
         $result = $this->calculate(5, 3, '+');
         // var_dump($result);
@@ -55,3 +55,23 @@ class ExampleFeatureTest extends TestCase
     }
 
 }
+
+
+// it('can log in with valid credentials', function () {
+//     // Create a user with valid credentials
+//     // $user = User::factory()->create([
+//     //     'email' => 'mahmud@gmail.com',
+//     //     'password' => bcrypt('123456'),
+//     // ]);
+
+//     // Attempt to log in
+//     $response = $this->post('/api/v1/login', [
+//         'email' => 'mahmud@gmail.com',
+//         'password' => '123456',
+//     ]);
+
+//     // Assert that the login was successful
+//     $response
+//         ->assertStatus(201);
+
+// });
