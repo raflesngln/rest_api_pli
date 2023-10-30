@@ -93,7 +93,7 @@ class TrsTrackingTruckController extends Controller
         }
 
         $resp->update($request->all());
-        return response()->json($resp);
+        return new TrsTrackingTruckResource($resp);
     }
 
     public function destroy($id)
