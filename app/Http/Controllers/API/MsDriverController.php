@@ -48,7 +48,7 @@ class MsDriverController extends Controller
         if (!$resp) {
             return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-        return response()->json($resp);
+        return new MsDriver($resp);
     }
 
     public function store(Request $request)
@@ -100,8 +100,7 @@ class MsDriverController extends Controller
         }
 
         $resp->update($request->all());
-        $response = MsDriverResource::collection($resp);
-        return response()->json($response);
+        return new MsDriver($resp);
     }
 
     public function destroy($id)
