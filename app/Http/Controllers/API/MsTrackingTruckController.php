@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MsTrackingTruckResource;
 use App\Models\MsTrackingTruck;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,11 +30,12 @@ class MsTrackingTruckController extends Controller
 
         // Apply ordering
         $query = MsTrackingTruck::query();
-        $query->orderBy(isset($order_by)?$order_by:'id', isset($order_direction)?$order_direction:'asc');
-       // Apply pagination
-       $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
+        $query->orderBy(isset($order_by) ? $order_by : 'id', isset($order_direction) ? $order_direction : 'asc');
+        // Apply pagination
+        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
 
-        return response()->json(['data'=>$items,'page'=>$page,'per_page'=>$per_page]);
+        $response = MsTrackingTruckResource::collection($items);
+        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
     public function show($id)
@@ -44,37 +48,33 @@ class MsTrackingTruckController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        return response()->json($resp);
+        return new MsTrackingTruckResource($resp);
     }
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'sorting'     => 'required|string|unique:ms_tracking_trucks',
-            'title'    => 'required|string|unique:ms_tracking_trucks',
-            'description'    => 'required|string'
+            'sorting' => 'required|string|unique:ms_tracking_trucks',
+            'title' => 'required|string',
+            'description' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            echo $validator->messages()->toJson();
-        }else{
-            $ms_tracking = MsTrackingTruck::create([
-                'sorting' => $request['sorting'],
-                'title' => $request['title'],
-                'description' =>$request['description'],
-            ]);
-
-
-            $response = [
-                'ms_tracking' => $ms_tracking,
-                'message' =>'Success create data'
-            ];
-
-            return response($response, 201);
+            return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
 
+        $ms_tracking = MsTrackingTruck::create([
+            'sorting' => $request['sorting'],
+            'title' => $request['title'],
+            'description' => $request['description'],
+        ]);
 
+        $response = [
+            'ms_tracking' => new MsTrackingTruckResource($ms_tracking), // Use the resource here
+            'message' => 'Success create data',
+        ];
+
+        return response()->json($response, 201); // Return the response with a 201 status code
     }
 
     public function update(Request $request, $id)

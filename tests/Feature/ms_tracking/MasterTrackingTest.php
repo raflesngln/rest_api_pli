@@ -28,13 +28,12 @@ class MasterTrackingTest extends TestCase
     }
 
 
-    public function test_create_new_driver_users()
+    public function test_create_new_master_users()
     {
     // Create a new user through the REST API
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
         ])->post('/api/v1/ms_tracking', [
-            'id' => $this->id,
             'sorting' =>  $this->sorting,
             'title' => 'SELESAI PEKERJAAN',
             'description' => 'Selesai Pekerjaan Trucking',
@@ -66,10 +65,12 @@ class MasterTrackingTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonStructure([
+                'data' => [
                     'id',
                     'sorting',
                     'title',
-                    'description',
+                    'description'
+                ]
             ]);
     }
 
@@ -84,19 +85,22 @@ class MasterTrackingTest extends TestCase
             'order_direction' => 'asc',
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(200) // Expect a 200 status code
         ->assertJsonStructure([
             'data' => [
-                'current_page',
-                'data' => [
-                    '*' => [
-                        'id',
-                        'sorting',
-                        'title',
-                        'description',
-                    ],
+                '*' => [
+                    'id',
+                    'sorting',
+                    'title',
+                    'description',
+                    'is_active',
+                    'is_deleted',
+                    'created_at',
+                    'updated_at',
                 ],
             ],
+            'page',
+            'per_page',
         ]);
     }
 

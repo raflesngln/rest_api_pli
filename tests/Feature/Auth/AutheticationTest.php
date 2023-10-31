@@ -55,14 +55,15 @@ class AutheticationTest extends TestCase
             $response
             ->assertStatus(201)
             ->assertJsonStructure([
-                'driver' => [
-                    'id',
-                    'driver_no',
-                    'driver_name',
-                    'email',
-                ],
-                'message'
-            ]);
+                'data'=>[
+                    'driver' => [
+                        'id',
+                        'driver_no',
+                        'driver_name',
+                        'email',
+                    ],
+                    'message'
+                ]]);
         }
 
         public function test_login_new_driver_created_mustbe_succeess(): void

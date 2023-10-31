@@ -39,7 +39,7 @@ class TrsTrackingTruckTest extends TestCase
             'Authorization' => 'Bearer ' . $this->token,
         ])->post('/api/v1/trs_truck_tracking', [
             'id_dispacth' => $this->id_dispatch,
-            'id_tracking' =>  2,
+            'id_tracking' =>  '2',
             'tracking_date' => '2023-01-01 12:00:00',
             'title' => 'Selesai Pekerjaan Trucking',
             'description' => 'lorem ipsum',
@@ -67,42 +67,44 @@ class TrsTrackingTruckTest extends TestCase
         $id= (int)$this->id +1;
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('/api/v1/trs_truck_tracking/'.$this->id);
+        ])->get('/api/v1/trs_truck_tracking/2');
 
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                    'id',
-                    'id_dispacth',
-                    'id_tracking',
-                    'tracking_date',
-            ]);
+        $response->assertStatus(200) // Expect a 201 status code
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'id_dispacth',
+                'id_tracking',
+                'tracking_date'
+            ],
+        ]);
     }
 
     public function test_get_all_master_tracking_has_created(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('/api/v1/trs_truck_tracking', [
-            'page' => 1,
-            'per_page' => 10,
-            'order_by' => 'id',
-            'order_direction' => 'asc',
-        ]);
+        ])->get('/api/v1/trs_truck_tracking?page=1&per_page=10&order_by=id&order_direction=asc');
 
         $response->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
-                'current_page',
-                'data' => [
-                    '*' => [
-                        'id',
-                        'id_dispacth',
-                        'id_tracking',
-                        'tracking_date',
-                    ],
-                ],
+                '*' => [
+                    'id',
+                    'id_dispatch',
+                    'id_tracking',
+                    'tracking_date',
+                    'title',
+                    'description',
+                    'attachment',
+                    'id_done',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ],
+            'page',
+            'per_page'
         ]);
     }
 

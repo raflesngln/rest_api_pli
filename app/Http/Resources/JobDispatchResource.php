@@ -15,13 +15,13 @@ class JobDispatchResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id',
-            'id_job',
-            'customer_name',
-            'delivery_loc',
-            'driver',
-            'est_time',
-            'koli',
+            'id' => $this->id,
+            'id_job' => $this->id_job,
+            'customer_name' => $this->customer_name,
+            'delivery_loc' => $this->delivery_loc,
+            'driver' => $this->driver,
+            'est_time' => $this->est_time,
+            'koli' => $this->koli,
         ];
     }
 }

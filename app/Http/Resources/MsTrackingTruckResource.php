@@ -15,14 +15,14 @@ class MsTrackingTruckResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id',
-            'sorting',
-            'title',
-            'description',
-            'is_active',
-            'is_deleted',
-            'created_at',
-            'updated_at',
+            'id' => $this->id,
+            'sorting' => $this->sorting,
+            'title' => $this->title,
+            'description' => $this->description,
+            'is_active' => $this->is_active,
+            'is_deleted' => $this->is_deleted,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

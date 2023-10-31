@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MsDriverResource;
 use App\Models\MsDriver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,11 +30,13 @@ class MsDriverController extends Controller
 
         // Apply ordering
         $query = MsDriver::query();
-        $query->orderBy(isset($order_by)?$order_by:'id', isset($order_direction)?$order_direction:'asc');
-       // Apply pagination
-       $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
+        $query->orderBy(isset($order_by) ? $order_by : 'id', isset($order_direction) ? $order_direction : 'asc');
+        // Apply pagination
+        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
 
-        return response()->json(['data'=>$items,'page'=>$page,'per_page'=>$per_page]);
+        $response = MsDriverResource::collection($items);
+
+        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
     public function show($id)
@@ -45,47 +49,50 @@ class MsDriverController extends Controller
             return response()->json(['message' => 'Driver not found'], 404);
         }
 
-        return response()->json(['data' => $resp]);
+        return response()->json(['data' => $resp],200);
     }
 
     public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            'driver_no'     => 'required|string|unique:ms_drivers',
-            'driver_name'    => 'required|string',
-            'is_active'    => 'required|integer',
-            'is_deleted'    => 'required|integer',
-            'email'    => 'required|string|email|unique:ms_drivers',
-            'password'    => 'required|string',
+            'driver_no' => 'required|string|unique:ms_drivers',
+            'driver_name' => 'required|string',
+            'driver_contact_number1' => 'nullable|string', // Assuming it's optional
+            'driver_contact_number2' => 'nullable|string', // Assuming it's optional
+            'is_active' => 'required|integer',
+            'is_deleted' => 'required|integer',
+            'ip' => 'nullable|string', // Assuming it's optional
+            'create_by' => 'nullable|string', // Assuming it's optional
+            'vendor_id' => 'nullable|string', // Assuming it's optional
+            'email' => 'required|string|email|unique:ms_drivers',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            echo $validator->messages()->toJson();
-        }else{
-            $driver = MsDriver::create([
-                'driver_no' => $request['driver_no'],
-                'driver_name' => $request['driver_name'],
-                'driver_contact_number1' =>$request['driver_contact_number1'],
-                'driver_contact_number2' =>$request['driver_contact_number2'],
-                'is_active' =>$request['is_active'],
-                'is_deleted' =>$request['is_deleted'],
-                'ip' =>$request['ip'],
-                'create_by' =>$request['create_by'],
-                'vendor_id' =>$request['vendor_id'],
-                'email' =>$request['email'],
-                'password' =>bcrypt($request['password'])
-            ]);
-
-            $response = [
-                'driver' => $driver,
-                'message' =>'Success create data'
-            ];
-
-            return response($response, 201);
+            return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
 
+        $driver = MsDriver::create([
+            'driver_no' => $request['driver_no'],
+            'driver_name' => $request['driver_name'],
+            'driver_contact_number1' => $request['driver_contact_number1'],
+            'driver_contact_number2' => $request['driver_contact_number2'],
+            'is_active' => $request['is_active'],
+            'is_deleted' => $request['is_deleted'],
+            'ip' => $request['ip'],
+            'create_by' => $request['create_by'],
+            'vendor_id' => $request['vendor_id'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
+        ]);
 
+        $response = [
+            'driver' => new MsDriverResource($driver), // Use the resource here
+            'message' => 'Success create data',
+        ];
+
+        return response()->json(['data' => $response], 201);
     }
 
     public function update(Request $request, $driver_no)
@@ -114,5 +121,4 @@ class MsDriverController extends Controller
         $resp->delete();
         return response()->json(['message' => 'User deleted'],204);
     }
-
 }
