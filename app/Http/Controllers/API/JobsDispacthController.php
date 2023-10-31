@@ -22,40 +22,39 @@ class JobsDispacthController extends Controller
 
     public function index_flc(Request $request)
     {
+        // Set up validation rules for query parameters
         $validator = Validator::make($request->all(), [
-            'page'     => 'required',
-            'per_page'    => 'required',
+            'page' => 'required',
+            'per_page' => 'required',
         ]);
 
         if ($validator->fails()) {
-            echo $validator->messages()->toJson();
-        } else {
-            $page = $request->query('page', 1);
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], 400); // Return a 400 Bad Request response for validation errors
+        }
+
+        // if ($validator->fails()) {
+        //     echo $validator->messages()->toJson();
+        // } else {
+            $page = $request->query('page');
             $per_page = $request->query('per_page');
             $order_by = $request->query('order_by');
             $order_direction = $request->query('order_direction');
 
-            $results = DB::table('ms_dispatch as a')
-                ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
-                ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
-                ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
-                ->select(
-                    DB::raw('MAX(a.id) as id'),
-                    DB::raw('MAX(j.id_job) as id_job'),
-                    DB::raw('MAX(j.customer_name) as customer_name'),
-                    DB::raw('MAX(a.delivery_loc) as delivery_loc'),
-                    DB::raw('MAX(a.driver) as driver'),
-                    DB::raw('MAX(a.est_time) as est_time'),
-                    DB::raw('COUNT(*) as koli')
-                )
-                ->where('j.moda_transport', 'TRUCK')
-                ->where('j.cargo_type', 'FCL')
-                ->groupBy('d.id')
-                ->offset(($page - 1) * $per_page)
-                ->limit($per_page)
-                ->get();
-        }
-        return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page]);
+            $result = DB::table('ms_dispatch as a')
+            ->select(DB::raw('MAX(a.id) as id, MAX(a.id_volume) as id_volume, MAX(j.customer_name) as customer_name, MAX(a.delivery_loc) as delivery_loc, MAX(a.driver) as driver, MAX(a.est_time) as est_time, COUNT(*) as koli'))
+            ->leftJoin('ms_job_volume as v', 'a.id_volume', '=', 'v.id_volume')
+            ->leftJoin('ms_job as j', 'j.id_job', '=', 'v.id_job')
+            ->where('j.moda_transport', 'TRUCK')
+            ->where('j.cargo_type', 'LCL')
+            ->groupBy('v.id_volume')
+            ->offset(($page - 1) * $per_page)
+            ->limit($per_page)
+            ->get();
+        // }
+
+        return response()->json(['data' => $result, 'page' => $page, 'per_page' => $per_page], 200);
     }
     public function index_lcl(Request $request)
     {

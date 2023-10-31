@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\ms_tracking;
+namespace Tests\Feature\ms_driver;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -10,12 +10,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\MsDriver;
 
-class MasterTrackingTest extends TestCase
+class TrsTrackingTruckTest extends TestCase
 {
     // use DatabaseMigrations, DatabaseTransactions;
     var $url='localhost:8000';
-    var $id='20';
-    var $sorting='20';
+    var $id='';
+    var $id_dispatch='K-08202210030001';
     protected $token;
     public function setUp(): void
     {
@@ -25,51 +25,57 @@ class MasterTrackingTest extends TestCase
         $login =$this->loginUserDriver('mahmud@gmail.com','123456');
         $dataLogin= $login->json();
         $this->token=$dataLogin['token'];
+
+        DB::statement("ALTER TABLE trs_tracking_trucks AUTO_INCREMENT = 1"); // reset auto increment
+        $lastId = DB::table('trs_tracking_trucks')->max('id');
+        $this->id=$lastId;
     }
 
 
-    public function test_create_new_driver_users()
+    public function test_create_data_tracking()
     {
     // Create a new user through the REST API
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->post('/api/v1/ms_tracking', [
-            'id' => $this->id,
-            'sorting' =>  $this->sorting,
-            'title' => 'SELESAI PEKERJAAN',
-            'description' => 'Selesai Pekerjaan Trucking',
-            'is_active' => 1,
-            'is_deleted' => 0
+        ])->post('/api/v1/trs_truck_tracking', [
+            'id_dispacth' => $this->id_dispatch,
+            'id_tracking' =>  2,
+            'tracking_date' => '2023-01-01 12:00:00',
+            'title' => 'Selesai Pekerjaan Trucking',
+            'description' => 'lorem ipsum',
+            'attachment' => 'lorem ipsum.jpg',
+            'is_done' => 1,
+            'is_active' => 0,
         ]);
-
 
         // echo json_encode($response);
         $response
         ->assertStatus(201)
         ->assertJsonStructure([
-            'ms_tracking' => [
-                'sorting',
-                'title',
-                'description',
+            'data' => [
+                'id_dispacth',
+                'id_tracking',
+                'tracking_date',
             ],
             'message'
         ]);
     }
 
 
-    public function test_get_detail_driver_has_created(): void
+    public function test_get_detail_tracking_has_created(): void
     {
+        $id= (int)$this->id +1;
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('/api/v1/ms_tracking/'.$this->id);
+        ])->get('/api/v1/trs_truck_tracking/'.$this->id);
 
         $response
             ->assertStatus(200)
             ->assertJsonStructure([
                     'id',
-                    'sorting',
-                    'title',
-                    'description',
+                    'id_dispacth',
+                    'id_tracking',
+                    'tracking_date',
             ]);
     }
 
@@ -77,7 +83,7 @@ class MasterTrackingTest extends TestCase
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('/api/v1/ms_tracking', [
+        ])->get('/api/v1/trs_truck_tracking', [
             'page' => 1,
             'per_page' => 10,
             'order_by' => 'id',
@@ -91,9 +97,9 @@ class MasterTrackingTest extends TestCase
                 'data' => [
                     '*' => [
                         'id',
-                        'sorting',
-                        'title',
-                        'description',
+                        'id_dispacth',
+                        'id_tracking',
+                        'tracking_date',
                     ],
                 ],
             ],
@@ -101,15 +107,21 @@ class MasterTrackingTest extends TestCase
     }
 
 
-    public function test_update_master_has_created(): void
+    public function test_update_tracking_has_created(): void
     {
 
+        $id= $this->id +1;
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->put('/api/v1/ms_tracking/' . $this->id, [
-            'sorting' => $this->sorting,
-            'title' => 'SELESAI PEKERJAANSELESAI PEKERJAAN',
-            'description' => 'SELESAI PEKERJAANSELESAI PEKERJAAN',
+        ])->put('/api/v1/trs_truck_tracking/'.$this->id, [
+            'id_dispacth' => $this->id_dispatch,
+            'id_tracking' => 2,
+            'tracking_date' => '2023-01-01 12:00:00',
+            'title' => 'melakukan update Selesai Pekerjaan Trucking',
+            'description' => 'lorem ipsum',
+            'attachment' => 'lorem ipsum.jpg',
+            'is_done' => 1,
+            'is_active' => 0,
         ]);
 
         // $response->assertStatus(200);
@@ -119,9 +131,9 @@ class MasterTrackingTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     'id',
-                    'sorting',
+                    'id_dispacth',
+                    'id_tracking',
                     'title',
-                    'description',
                 ]
             ])
             ->assertJson([
@@ -138,14 +150,18 @@ class MasterTrackingTest extends TestCase
         return $response;
     }
 
+
+
         // finally delete the user has created for clean database testing
         public function test_finally_delete_data_created_testing_for_clean_db(): void
         {
+
+            $lastId = DB::table('trs_tracking_trucks')->max('id');
+
             $response = $this->withHeaders([
                         'Authorization' => 'Bearer ' . $this->token,
-                    ])->delete('/api/v1/ms_tracking/'.$this->sorting);
+                    ])->delete('/api/v1/trs_truck_tracking/'.$lastId);
 
-            DB::statement("ALTER TABLE ms_tracking_trucks AUTO_INCREMENT = 1");  // reset column autoincrement to 1
             $response->assertStatus(200);
         }
 

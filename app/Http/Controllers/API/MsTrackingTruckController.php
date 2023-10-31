@@ -37,10 +37,11 @@ class MsTrackingTruckController extends Controller
     public function show($id)
     {
         // Retrieve a single user by ID
-        $resp = MsTrackingTruck::find($id);
+        // $resp = MsTrackingTruck::find($id);
+        $resp = MsTrackingTruck::where('sorting', $id)->first();
 
         if (!$resp) {
-            return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         return response()->json($resp);
@@ -58,7 +59,7 @@ class MsTrackingTruckController extends Controller
         if ($validator->fails()) {
             echo $validator->messages()->toJson();
         }else{
-            $driver = MsTrackingTruck::create([
+            $ms_tracking = MsTrackingTruck::create([
                 'sorting' => $request['sorting'],
                 'title' => $request['title'],
                 'description' =>$request['description'],
@@ -66,7 +67,7 @@ class MsTrackingTruckController extends Controller
 
 
             $response = [
-                'driver' => $driver,
+                'ms_tracking' => $ms_tracking,
                 'message' =>'Success create data'
             ];
 
@@ -82,35 +83,37 @@ class MsTrackingTruckController extends Controller
         $sorting = $input['sorting'];
 
         $check = MsTrackingTruck::where('sorting', $sorting)
-            ->whereNotIn('id', [$id])
+            ->whereNotIn('sorting', [$id])
             ->get();
+        // $check = MsTrackingTruck::where('sorting', $id)->first();
 
 
         if(count($check) > 0){
-            return response()->json(['message'=>'Sudah ada yang punya index ini']);
+            return response()->json(['message'=>'Sudah ada yang punya index ini'],204);
         }else{
             // Update an existing user
-            $resp = MsTrackingTruck::find($id);
+            // $resp = MsTrackingTruck::find($id);
+            $resp = MsTrackingTruck::where('sorting', $id)->first();
 
             if (!$resp) {
-                return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+                return response()->json(['message' => 'User not found'], 404);
             }
 
             $resp->update($request->all());
-            return response()->json($resp);
+            return response()->json(['data'=>$resp, 'message' => 'success update data'],200);
         }
     }
 
     public function destroy($id)
     {
-        // Delete a user
-        $resp = MsTrackingTruck::find($id);
+        // Delete a data
+        $resp = MsTrackingTruck::where('sorting', $id)->first();
 
         if (!$resp) {
-            return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $resp->delete();
-        return response()->json(['message' => 'User deleted']);
+        return response()->json(['message' => 'User deleted'],200);
     }
 }

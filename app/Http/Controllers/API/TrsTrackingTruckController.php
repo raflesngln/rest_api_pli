@@ -42,7 +42,7 @@ class TrsTrackingTruckController extends Controller
         $resp = TrsTrackingTruck::find($id);
 
         if (!$resp) {
-            return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         return response()->json($resp);
@@ -63,6 +63,7 @@ class TrsTrackingTruckController extends Controller
             echo $validator->messages()->toJson();
         }else{
             $row = TrsTrackingTruck::create([
+                'id' => $request['id'],
                 'id_dispacth' => $request['id_dispacth'],
                 'id_tracking' => $request['id_tracking'],
                 'tracking_date' =>$request['tracking_date'],
@@ -91,11 +92,11 @@ class TrsTrackingTruckController extends Controller
         $resp = TrsTrackingTruck::find($id);
 
         if (!$resp) {
-            return response()->json(['message' => 'Tracking not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Tracking not found'], 404);
         }
 
         $resp->update($request->all());
-        return response()->json($resp);
+        return response()->json(['data'=>$resp, 'message' => 'success update data'],200);
     }
 
     public function destroy($id)
@@ -104,7 +105,7 @@ class TrsTrackingTruckController extends Controller
         $resp = TrsTrackingTruck::find($id);
 
         if (!$resp) {
-            return response()->json(['message' => 'Tracking not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Tracking not found'], 404);
         }
 
         $resp->delete();

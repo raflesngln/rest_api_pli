@@ -53,10 +53,10 @@ Route::prefix('v1')->group(function () {
         Route::put('/ms_tracking/{id}', [MsTrackingTruckController::class, 'update']);
         Route::delete('/ms_tracking/{id}', [MsTrackingTruckController::class, 'destroy']);
 
-        Route::get('/job_dispacth_fcl', [JobsDispacthController::class, 'index_flc']);
-        Route::get('/job_dispacth_lcl', [JobsDispacthController::class, 'index_lcl']);
-        Route::get('/job_dispacth_fcl/{id}', [JobsDispacthController::class, 'show_fcl']);
-        Route::get('/job_dispacth_lcl/{id}', [JobsDispacthController::class, 'show_lcl']);
+        Route::get('/job_dispatch_fcl', [JobsDispacthController::class, 'index_flc']);
+        Route::get('/job_dispatch_lcl', [JobsDispacthController::class, 'index_lcl']);
+        Route::get('/job_dispatch_fcl/{id}', [JobsDispacthController::class, 'show_fcl']);
+        Route::get('/job_dispatch_lcl/{id}', [JobsDispacthController::class, 'show_lcl']);
 
         Route::get('/trs_truck_tracking', [TrsTrackingTruckController::class, 'index']);
         Route::get('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'show']);
