@@ -21,7 +21,41 @@ class JobsDispacthController extends Controller
         // $this->middleware('auth:sanctum');
     }
 
-    public function index_flc(Request $request)
+    public function index_fcl(Request $request)
+    {
+        // Set up validation rules for query parameters
+        $validator = Validator::make($request->all(), [
+            'page' => 'required',
+            'per_page' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], 400); // Return a 400 Bad Request response for validation errors
+        }
+
+            $page = $request->query('page');
+            $per_page = $request->query('per_page');
+            $order_by = $request->query('order_by');
+            $order_direction = $request->query('order_direction');
+
+            $results = DB::table('ms_dispatch as a')
+            ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
+            ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
+            ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
+            ->select('j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', DB::raw('1 as koli'))
+            ->where('j.moda_transport', 'TRUCK')
+            ->where('j.cargo_type', 'FCL')
+            ->groupBy('d.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time')
+            ->limit(10)
+            ->get();
+
+
+        return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page], 200);
+    }
+
+    public function index_lcl(Request $request)
     {
         // Set up validation rules for query parameters
         $validator = Validator::make($request->all(), [
@@ -57,7 +91,7 @@ class JobsDispacthController extends Controller
 
         return response()->json(['data' => $result, 'page' => $page, 'per_page' => $per_page], 200);
     }
-    public function index_lcl(Request $request)
+    public function index_lclCOPY(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'page'     => 'required',
