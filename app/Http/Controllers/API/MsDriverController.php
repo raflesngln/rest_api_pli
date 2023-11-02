@@ -106,7 +106,7 @@ class MsDriverController extends Controller
         }
 
         $resp->update($request->all());
-        return response()->json(['data'=>$resp,'message'=>'success update data']);
+        return response()->json(['data'=>$resp,'message'=>'success update data'],200);
     }
 
     public function destroy($driver_no)

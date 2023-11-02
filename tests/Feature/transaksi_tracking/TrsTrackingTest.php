@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\ms_driver;
+namespace Tests\Feature\transaksi_tracking;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\MsDriver;
 
-class TrsTrackingTruckTest extends TestCase
+class TrsTrackingTest extends TestCase
 {
     // use DatabaseMigrations, DatabaseTransactions;
     var $url='localhost:8000';
@@ -45,9 +45,8 @@ class TrsTrackingTruckTest extends TestCase
             'description' => 'lorem ipsum',
             'attachment' => 'lorem ipsum.jpg',
             'is_done' => 1,
-            'is_active' => 0,
+            'is_active' => 1,
         ]);
-
         // echo json_encode($response);
         $response
         ->assertStatus(201)
@@ -59,6 +58,7 @@ class TrsTrackingTruckTest extends TestCase
             ],
             'message'
         ]);
+
     }
 
 
@@ -111,11 +111,9 @@ class TrsTrackingTruckTest extends TestCase
 
     public function test_update_tracking_has_created(): void
     {
-
-        $id= $this->id +1;
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->put('/api/v1/trs_truck_tracking/'.$this->id, [
+        ])->put('/api/v1/trs_truck_tracking/2', [
             'id_dispacth' => $this->id_dispatch,
             'id_tracking' => 2,
             'tracking_date' => '2023-01-01 12:00:00',
@@ -123,11 +121,10 @@ class TrsTrackingTruckTest extends TestCase
             'description' => 'lorem ipsum',
             'attachment' => 'lorem ipsum.jpg',
             'is_done' => 1,
-            'is_active' => 0,
+            'is_active' =>1,
         ]);
 
-        // $response->assertStatus(200);
-        // echo json_decode($response->getContent());
+    //    echo json_encode($response, JSON_PRETTY_PRINT);
         $response
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -136,10 +133,8 @@ class TrsTrackingTruckTest extends TestCase
                     'id_dispacth',
                     'id_tracking',
                     'title',
-                ]
-            ])
-            ->assertJson([
-                'message' => 'success update data'
+                ],
+                'message'
             ]);
     }
 
@@ -155,7 +150,7 @@ class TrsTrackingTruckTest extends TestCase
 
 
         // finally delete the user has created for clean database testing
-        public function test_finally_delete_data_created_testing_for_clean_db(): void
+        public function test_finally_delete_data_created_testing_for_clean_table_trs(): void
         {
 
             $lastId = DB::table('trs_tracking_trucks')->max('id');

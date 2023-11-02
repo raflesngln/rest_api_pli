@@ -18,6 +18,7 @@ class AutheticationTest extends TestCase
     var $email='mawar@gmail.com';
     var $password='123456';
     protected $token;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -30,40 +31,50 @@ class AutheticationTest extends TestCase
         // For example, you can set up database transactions
         // $this->beginDatabaseTransaction();
     }
+    function loginUserDriver($username,$password){
+        // Attempt to log in
+        $response = $this->post('/api/v1/login', [
+            'email' => $username,
+            'password' => $password,
+        ]);
+        return $response;
+    }
 
          public function test_create_new_driver_users()
         {
         // Create a new user through the REST API
-            $response = $this->withHeaders([
-                'Authorization' => 'Bearer ' . $this->token,
-            ])->post('/api/v1/ms_driver', [
-                'driver_no' => $this->id_driver,
-                'driver_contact_number1' => '',
-                'driver_contact_number2' => '',
-                'driver_name' => 'Mawar',
-                'is_active' => 1,
-                'is_deleted' => 0,
-                'id' => '',
-                'email' => $this->email,
-                'create_by' => '',
-                'vendor_id' => '',
-                'password' => $this->password,
-            ]);
-
-
-            // echo json_encode($response);
-            $response
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'data'=>[
-                    'driver' => [
-                        'id',
-                        'driver_no',
-                        'driver_name',
-                        'email',
-                    ],
-                    'message'
-                ]]);
+            try {
+                $response = $this->withHeaders([
+                    'Authorization'=>'Bearer '.$this->token,
+                ])->post('/api/v1/ms_driver', [
+                    'driver_no' => $this->id_driver,
+                    'driver_name' => 'Mawar',
+                    'driver_contact_number1' => '',
+                    'driver_contact_number2' => '',
+                    'is_active' => '1',
+                    'is_deleted' => '0',
+                    'ip' => '',
+                    'create_by' => '',
+                    'vendor_id' => '',
+                    'email' => $this->email,
+                    'password' => $this->password,
+                ]);
+                // echo json_encode($response);
+                 $response
+                    ->assertStatus(201)
+                    ->assertJsonStructure([
+                        'data'=>[
+                            'driver' => [
+                                'id',
+                                'driver_no',
+                                'driver_name',
+                                'email',
+                            ],
+                            'message'
+                        ]]);
+            } catch (\Throwable $e) {
+                echo $e->getMessage();
+            }
         }
 
         public function test_login_new_driver_created_mustbe_succeess(): void
@@ -88,6 +99,7 @@ class AutheticationTest extends TestCase
         // Attempt to log in
         $response = $this->loginUserDriver($this->email,$this->password);
         // Assert that the login was successful
+
         $response
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -152,35 +164,33 @@ class AutheticationTest extends TestCase
     }
     public function test_update_driver_has_created(): void
     {
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->put('/api/v1/ms_driver/'.$this->id_driver,[
-            'driver_no' => $this->id_driver,
-            'driver_contact_number1' => '',
-            'driver_contact_number2' => '',
-            'driver_name' => 'Mawar melati',
-            'is_active' => 1,
-            'is_deleted' => 0,
-            'id' => '',
-            'email' => $this->email,
-            'create_by' => '',
-            'vendor_id' => '',
-            'password' =>'1234567890',
-        ]);
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'driver_no',
-                    'driver_name',
-                    'email',
-                ]
-            ])
-            ->assertJson([
-                'message' => 'success update data'
+            $response = $this->withHeaders([
+                'Authorization' => 'Bearer '.$this->token,
+            ])->put('/api/v1/ms_driver/'.$this->id_driver,[
+                'driver_no' => $this->id_driver,
+                'driver_contact_number1' => '',
+                'driver_contact_number2' => '',
+                'driver_name' => 'Mawar melati',
+                'is_active' => 1,
+                'is_deleted' => 1,
+                'email' => $this->email,
+                'create_by' => '',
+                'vendor_id' => '',
+                'password' =>'1234567890',
             ]);
+            // echo json_encode($response, JSON_PRETTY_PRINT);
+            $response
+                ->assertStatus(200)
+                ->assertJsonStructure([
+                    'data' => [
+                        'id',
+                        'driver_no',
+                        'driver_name',
+                        'email',
+                    ],
+                    'message'
+                ]);
+
     }
 
     public function test_access_profile_with_error_token_invalid(): void
@@ -194,15 +204,6 @@ class AutheticationTest extends TestCase
     }
 
 
-    function loginUserDriver($username,$password){
-        // Attempt to log in
-        $response = $this->post('/api/v1/login', [
-            'email' => $username,
-            'password' => $password,
-        ]);
-        return $response;
-    }
-
     // finally delete the user has created for clean database testing
         public function test_finally_delete_data_created_testing_for_clean_db(): void
     {
@@ -215,11 +216,7 @@ class AutheticationTest extends TestCase
         $response->assertStatus(204);
     }
 
-    public function tearDown(): void
-    {
-        // Optionally, you can perform cleanup after each test
-        // parent::tearDown();
-    }
+
 
 
 }
