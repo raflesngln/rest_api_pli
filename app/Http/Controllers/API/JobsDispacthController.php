@@ -69,9 +69,6 @@ class JobsDispacthController extends Controller
             ], 400); // Return a 400 Bad Request response for validation errors
         }
 
-        // if ($validator->fails()) {
-        //     echo $validator->messages()->toJson();
-        // } else {
             $page = $request->query('page');
             $per_page = $request->query('per_page');
             $order_by = $request->query('order_by');
@@ -87,46 +84,8 @@ class JobsDispacthController extends Controller
             ->offset(($page - 1) * $per_page)
             ->limit($per_page)
             ->get();
-        // }
 
         return response()->json(['data' => $result, 'page' => $page, 'per_page' => $per_page], 200);
-    }
-    public function index_lclCOPY(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'page'     => 'required',
-            'per_page'    => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            echo $validator->messages()->toJson();
-        } else {
-            $page = $request->query('page', 1);
-            $per_page = $request->query('per_page');
-            $order_by = $request->query('order_by');
-            $order_direction = $request->query('order_direction');
-
-            $results = DB::table('ms_dispatch as a')
-                ->leftJoin('ms_job_volume as v', 'a.id_volume', '=', 'v.id_volume')
-                ->leftJoin('ms_job as j', 'j.id_job', '=', 'v.id_job')
-                ->select(
-                    DB::raw('MAX(a.id) as id'),
-                    DB::raw('MAX(a.id_volume) as id_volume'),
-                    DB::raw('MAX(j.customer_name) as customer_name'),
-                    DB::raw('MAX(a.delivery_loc) as delivery_loc'),
-                    DB::raw('MAX(a.driver) as driver'),
-                    DB::raw('MAX(a.est_time) as est_time'),
-                    DB::raw('COUNT(*) as koli')
-                )
-                ->where('j.moda_transport', 'TRUCK')
-                ->where('j.cargo_type', 'LCL')
-                ->groupBy('v.id_volume')
-                ->offset(($page - 1) * $per_page)
-                ->limit($per_page)
-                ->get();
-            $response = JobDispatchResource::collection($results);
-        }
-        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
     public function show_fcl($id)
@@ -147,7 +106,7 @@ class JobsDispacthController extends Controller
             )
             ->where('j.moda_transport', 'TRUCK')
             ->where('j.cargo_type', 'FCL')
-            ->where('d.id', $id)
+            ->where('d.id_job', $id)
             ->groupBy('d.id')
             ->limit(10)
             ->get();
@@ -171,7 +130,7 @@ class JobsDispacthController extends Controller
             )
             ->where('j.moda_transport', 'TRUCK')
             ->where('j.cargo_type', 'LCL')
-            ->where('a.id', $id)
+            ->where('a.id_volume', $id)
             ->groupBy('v.id_volume')
             ->get();
         $response = JobDispatchResource::collection($results);
