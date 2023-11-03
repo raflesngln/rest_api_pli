@@ -21,7 +21,7 @@ class TrsTrackingTruckController extends Controller
     public function index(Request $request)
     {
 
-        $page = $request->query('page', 1);
+        $page = $request->query('page');
         $per_page = $request->query('per_page');
         $order_by = $request->query('order_by');
         $order_direction = $request->query('order_direction');
@@ -33,6 +33,7 @@ class TrsTrackingTruckController extends Controller
         $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
         $response = TrsTrackingTruckResource::collection($items);
         return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
+
     }
 
     public function show(int $id)
@@ -52,7 +53,7 @@ class TrsTrackingTruckController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_dispacth'     => 'required|string',
+            'id_dispatch'     => 'required|string',
             'id_tracking'    => 'required|string',
             'tracking_date'    => 'required',
             'title'    => 'required|string',
@@ -65,10 +66,11 @@ class TrsTrackingTruckController extends Controller
         }
 
         $row = TrsTrackingTruck::create([
-            'id_dispacth' => $request['id_dispacth'],
+            'id_dispatch' => $request['id_dispatch'],
             'id_tracking' => $request['id_tracking'],
             'tracking_date' => $request['tracking_date'],
             'title' => $request['title'],
+            'kilometer' => isset($request['kilometer'])?$request['kilometer']:9,
             'description' => $request['description'],
             'attachment' => $request['attachment'],
             'is_done' => $request['is_done'], // You can add this line if 'is_done' is a field in your table

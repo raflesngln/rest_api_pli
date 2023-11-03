@@ -20,6 +20,7 @@ class TrsTrackingTruckResource extends JsonResource
             'id_tracking' => $this->id_tracking,
             'tracking_date' => $this->tracking_date,
             'title' => $this->title,
+            'kilometer' => $this->kilometer,
             'description' => $this->description,
             'attachment' => $this->attachment,
             'id_done' => $this->id_done,

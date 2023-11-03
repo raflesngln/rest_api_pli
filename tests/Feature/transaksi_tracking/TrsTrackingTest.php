@@ -38,7 +38,7 @@ class TrsTrackingTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
         ])->post('/api/v1/trs_truck_tracking', [
-            'id_dispacth' => $this->id_dispatch,
+            'id_dispatch' => $this->id_dispatch,
             'id_tracking' =>  '2',
             'tracking_date' => '2023-01-01 12:00:00',
             'title' => 'Selesai Pekerjaan Trucking',
@@ -52,7 +52,7 @@ class TrsTrackingTest extends TestCase
         ->assertStatus(201)
         ->assertJsonStructure([
             'data' => [
-                'id_dispacth',
+                'id_dispatch',
                 'id_tracking',
                 'tracking_date',
             ],
@@ -73,7 +73,7 @@ class TrsTrackingTest extends TestCase
         ->assertJsonStructure([
             'data' => [
                 'id',
-                'id_dispacth',
+                'id_dispatch',
                 'id_tracking',
                 'tracking_date'
             ],
@@ -114,7 +114,7 @@ class TrsTrackingTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
         ])->put('/api/v1/trs_truck_tracking/2', [
-            'id_dispacth' => $this->id_dispatch,
+            'id_dispatch' => $this->id_dispatch,
             'id_tracking' => 2,
             'tracking_date' => '2023-01-01 12:00:00',
             'title' => 'melakukan update Selesai Pekerjaan Trucking',
@@ -130,7 +130,7 @@ class TrsTrackingTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     'id',
-                    'id_dispacth',
+                    'id_dispatch',
                     'id_tracking',
                     'title',
                 ],

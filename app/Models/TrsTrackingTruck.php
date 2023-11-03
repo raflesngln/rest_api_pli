@@ -19,10 +19,11 @@ class TrsTrackingTruck extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id_dispacth',
+        'id_dispatch',
         'id_tracking',
         'tracking_date',
         'title',
+        'kilometer',
         'description',
         'attachmet',
         'is_done',
