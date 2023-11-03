@@ -42,7 +42,7 @@ class TrsTrackingTruckController extends Controller
         $resp = TrsTrackingTruck::where('id', $id)->first();
 
         if (!$resp) {
-            return response()->json(['message' => 'Driver not found'], 404);
+            return response()->json(['message' => 'Tracking not found'], 404);
         }
 
         return response()->json(['data' => $resp],200);
