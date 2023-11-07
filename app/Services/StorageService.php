@@ -54,4 +54,8 @@ class StorageService
     {
         return Storage::disk('s3')->deleteDirectory($path);
     }
+    public function multiDeleteFile($path)
+    {
+        return Storage::disk('s3')->delete($path);
+    }
 }
