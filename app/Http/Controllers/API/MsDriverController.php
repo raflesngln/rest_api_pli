@@ -7,16 +7,21 @@ use App\Http\Resources\MsDriverResource;
 use App\Models\MsDriver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Services\ObsService;
+use App\Services\StorageService;
 
 class MsDriverController extends Controller
 {
+    protected $storageService;
 
-    public function __construct()
+    public function __construct(StorageService $storageService)
     {
         $this->middleware('auth:sanctum');
+        $this->storageService = $storageService;
     }
 
     public function index(Request $request)
@@ -41,6 +46,13 @@ class MsDriverController extends Controller
 
     public function show($id)
     {
+        $file='pli/prisma.png';
+        $filebase64= json_decode($this->storageService->getFileBase64($file));
+        //get File
+        // $fileGet=json_decode($this->storageService->getFileBase64($file));
+        //dave File
+        // $upload=json_decode($this->storageService->uploadFile($file));
+
 
         // Retrieve a single user by ID
         $resp = MsDriver::where('driver_no', $id)->first();
@@ -49,8 +61,9 @@ class MsDriverController extends Controller
             return response()->json(['message' => 'Driver not found'], 404);
         }
 
-        return response()->json(['data' => $resp],200);
+        return response()->json(['data' => $resp,'file'=>$filebase64],200);
     }
+
 
     public function store(Request $request)
     {

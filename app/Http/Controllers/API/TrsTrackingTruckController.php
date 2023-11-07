@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class TrsTrackingTruckController extends Controller
 {
-
-
     public function __construct()
     {
         $this->middleware('auth:sanctum');
@@ -87,13 +85,11 @@ class TrsTrackingTruckController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Update an existing user
-        $resp = TrsTrackingTruck::find($id);
+        $resp = TrsTrackingTruck::where('id', $id)->first();
 
         if (!$resp) {
             return response()->json(['message' => 'Tracking not found'], 404);
         }
-
         $resp->update($request->all());
         return response()->json(['data'=>$resp, 'message' => 'success update data'],200);
     }
