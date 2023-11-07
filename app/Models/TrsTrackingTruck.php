@@ -25,7 +25,7 @@ class TrsTrackingTruck extends Model
         'title',
         'kilometer',
         'description',
-        'attachmet',
+        'attachment',
         'is_done',
         'is_active',
     ];

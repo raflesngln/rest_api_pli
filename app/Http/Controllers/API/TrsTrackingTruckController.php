@@ -56,7 +56,6 @@ class TrsTrackingTruckController extends Controller
             'tracking_date'    => 'required',
             'title'    => 'required|string',
             'description'    => 'required|string',
-            'attachment'    => 'required|string',
         ]);
 
         if ($validator->fails()) {
