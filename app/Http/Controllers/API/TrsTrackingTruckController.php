@@ -56,7 +56,7 @@ class TrsTrackingTruckController extends Controller
     {
         $id_dispatch= $request['id_dispatch'];
         $filename= $id_dispatch.'_'.date('Y-m-d H:i:s');
-        $fileData="adsadasdsadsa";// $request['attachment']
+        $fileData="lorem ipsaudasdasasdasdasdjasdbajsdasj/asdasd/asdasdasd/sdhasdhavsdhasd";// $request['attachment']
 
         $validator = Validator::make($request->all(), [
             'id_dispatch'     => 'required|string',
