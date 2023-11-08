@@ -8,12 +8,16 @@ use App\Models\TrsTrackingTruck;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ObsStorageService;
+
 
 class TrsTrackingTruckController extends Controller
 {
-    public function __construct()
+    protected $ObsstorageService;
+    public function __construct(ObsStorageService $ObsstorageService)
     {
         $this->middleware('auth:sanctum');
+        $this->ObsstorageService = $ObsstorageService;
     }
 
     public function index(Request $request)
@@ -50,6 +54,9 @@ class TrsTrackingTruckController extends Controller
 
     public function store(Request $request)
     {
+        $id_dispatch= $request['id_dispatch'];
+        $filename= $id_dispatch.'_'.date('Y-m-d H:i:s');
+
         $validator = Validator::make($request->all(), [
             'id_dispatch'     => 'required|string',
             'id_tracking'    => 'required|string',
@@ -62,6 +69,8 @@ class TrsTrackingTruckController extends Controller
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
 
+        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $request['attachment']));
+
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
             'id_tracking' => $request['id_tracking'],
@@ -69,7 +78,7 @@ class TrsTrackingTruckController extends Controller
             'title' => $request['title'],
             'kilometer' => isset($request['kilometer'])?$request['kilometer']:9,
             'description' => $request['description'],
-            'attachment' => $request['attachment'],
+            'attachment' =>$filename,
             'is_done' => $request['is_done'], // You can add this line if 'is_done' is a field in your table
             'is_active' => $request['is_active'], // You can add this line if 'is_active' is a field in your table
         ]);

@@ -67,7 +67,7 @@ class TrsTrackingTest extends TestCase
         $id= (int)$this->id +1;
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('/api/v1/trs_truck_tracking/2');
+        ])->get('/api/v1/trs_truck_tracking/1');
 
         $response->assertStatus(200) // Expect a 201 status code
         ->assertJsonStructure([
@@ -113,7 +113,7 @@ class TrsTrackingTest extends TestCase
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->put('/api/v1/trs_truck_tracking/2', [
+        ])->put('/api/v1/trs_truck_tracking/1', [
             'id_dispatch' => $this->id_dispatch,
             'id_tracking' => 2,
             'tracking_date' => '2023-01-01 12:00:00',

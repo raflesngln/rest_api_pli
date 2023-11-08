@@ -12,16 +12,16 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ObsService;
-use App\Services\StorageService;
+use App\Services\ObsStorageService;
 
 class MsDriverController extends Controller
 {
-    protected $storageService;
+    protected $ObsstorageService;
 
-    public function __construct(StorageService $storageService)
+    public function __construct(ObsStorageService $ObsstorageService)
     {
         $this->middleware('auth:sanctum');
-        $this->storageService = $storageService;
+        $this->ObsstorageService = $ObsstorageService;
     }
 
     public function index(Request $request)
@@ -47,12 +47,7 @@ class MsDriverController extends Controller
     public function show($id)
     {
         $file='pli/prisma.png';
-        $filebase64= json_decode($this->storageService->getFileBase64($file));
-        //get File
-        // $fileGet=json_decode($this->storageService->getFileBase64($file));
-        //dave File
-        // $upload=json_decode($this->storageService->uploadFile($file));
-
+        $filebase64= json_decode($this->ObsstorageService->getFileBase64($file));
 
         // Retrieve a single user by ID
         $resp = MsDriver::where('driver_no', $id)->first();

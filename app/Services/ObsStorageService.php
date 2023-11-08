@@ -2,7 +2,7 @@
 
     namespace App\Services;
     use Illuminate\Support\Facades\Storage;
-class StorageService
+class ObsStorageService
 {
     public function put($path, $contents, $options = [])
     {
@@ -14,10 +14,22 @@ class StorageService
         return Storage::disk('s3')->get($path);
     }
 
+
     public function getFileBase64($file){
         $getfile = Storage::disk('s3')->get($file);
         $mimeType = Storage::disk('s3')->mimeType($file);
         $base64 = base64_encode($getfile);
+        // $mimeToExtension = [
+        //     'image/jpeg' => 'jpg',
+        //     'image/png' => 'png',
+        //     'application/pdf' => 'pdf',
+        //  ];
+        //  $extension = $mimeToExtension[$mimeType] ?? 'unknown';
+        $extension = $this->getFileExtension($file);
+         return json_encode(['base64'=>'data:'.$mimeType.';base64,'.$base64,'type'=>$extension]);
+    }
+    public function getFileExtension($file){
+        $mimeType = Storage::disk('s3')->mimeType($file);
         $mimeToExtension = [
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
@@ -25,13 +37,13 @@ class StorageService
             // Add more mappings as needed
          ];
          $extension = $mimeToExtension[$mimeType] ?? 'unknown';
-         return json_encode(['base64'=>'data:'.$mimeType.';base64,'.$base64,'type'=>$extension]);
+         return $extension;
     }
 
-    function uploadFile($base64) {
+    function uploadFile($path,$base64) {
         $fileData = base64_decode($base64);
-        $fileName = date('_tracking_Y-m-d H:i:s').'.png';
-        $save= Storage::disk('s3')->put('pli/'.$fileName, $fileData);
+        $extension = $this->getFileExtension($base64);
+        $save= Storage::disk('s3')->put($path.'.'.$extension, $fileData);
         if($save){
             return json_encode(['status'=>'success']);
         }else{
