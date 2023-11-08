@@ -47,7 +47,9 @@ class MsDriverController extends Controller
     public function show($id)
     {
         $file='pli/prisma.png';
+        $filename="sdasd";
         $filebase64= json_decode($this->ObsstorageService->getFileBase64($file));
+
 
         // Retrieve a single user by ID
         $resp = MsDriver::where('driver_no', $id)->first();
