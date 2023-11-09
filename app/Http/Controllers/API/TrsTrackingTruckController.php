@@ -55,11 +55,22 @@ class TrsTrackingTruckController extends Controller
     public function store(Request $request)
     {
         $id_dispatch= $request['id_dispatch'];
+
+        $file = $request->file('attachment');
+        // $file=base64_decode($file);
+        $fileName = $file->getClientOriginalName();
+
+
         $attachment = $request['attachment'];
         $attachment = base64_decode($attachment);
 
         $filename= $id_dispatch.'_'.date('Y-m-d-H-i-s');
         // $fileContents = file_get_contents($attachment);
+
+        var_dump($fileName);
+        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/',$filename, $file));
+        // echo json_encode($file);
+        exit();
 
         $validator = Validator::make($request->all(), [
             'id_dispatch'     => 'required|string',
@@ -73,8 +84,8 @@ class TrsTrackingTruckController extends Controller
         }
         // $extension= $this->ObsstorageService->getFileExtension($id_dispatch);
         // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
-        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
 
+        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
             'id_tracking' => $request['id_tracking'],
