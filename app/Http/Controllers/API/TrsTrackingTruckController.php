@@ -58,7 +58,7 @@ class TrsTrackingTruckController extends Controller
         $attachment = $request['attachment'];
         $attachment = base64_decode($attachment);
 
-        $filename= $id_dispatch.'_'.date('Y-m-d H:i:s');
+        $filename= $id_dispatch.'_'.date('Y-m-d-H-i-s');
         // $fileContents = file_get_contents($attachment);
 
         $validator = Validator::make($request->all(), [
