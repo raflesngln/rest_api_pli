@@ -40,10 +40,11 @@ class ObsStorageService
          return $extension;
     }
 
-    function uploadFile($path,$name,$fileData) {
+    function uploadFile($path,$fileData) {
         // $fileData = base64_decode($file);
         $extension = $this->getFileExtension($fileData);
-        $save= Storage::disk('s3')->put($path,$name.'.'.$extension, $fileData);
+        // $save= Storage::disk('s3')->put('pli/tracking/gambar.png', $fileData);
+        $save= Storage::disk('s3')->put($path,$fileData);
         if($save){
             return json_encode(['status'=>'success']);
         }else{
