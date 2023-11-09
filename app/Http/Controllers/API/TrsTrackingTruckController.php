@@ -73,7 +73,7 @@ class TrsTrackingTruckController extends Controller
         }
         // $extension= $this->ObsstorageService->getFileExtension($id_dispatch);
         // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
-        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename.'.jpg', $attachment));
+        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
 
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
