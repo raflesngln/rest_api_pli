@@ -55,7 +55,12 @@ class TrsTrackingTruckController extends Controller
     public function store(Request $request)
     {
         $id_dispatch= $request['id_dispatch'];
+        $attachment = $request['attachment'];
+        $attachment = base64_decode($attachment);
+
         $filename= $id_dispatch.'_'.date('Y-m-d H:i:s');
+        // $fileContents = file_get_contents($attachment);
+
         $validator = Validator::make($request->all(), [
             'id_dispatch'     => 'required|string',
             'id_tracking'    => 'required|string',
@@ -63,13 +68,12 @@ class TrsTrackingTruckController extends Controller
             'title'    => 'required|string',
             'description'    => 'required|string',
         ]);
-$fileData="2Qadff8e03+7/AFprdF/3RQAgPyk9Pm/rQjks3TrQPuH6j+dNi++3+9QAh5ck9uaUgZc+mKT+JvpSn/lp+FID/9k=";
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
         // $extension= $this->ObsstorageService->getFileExtension($id_dispatch);
-        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $fileData));
-        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/mypics', $fileData));
+        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
+        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
 
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
