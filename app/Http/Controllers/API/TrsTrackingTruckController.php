@@ -56,8 +56,6 @@ class TrsTrackingTruckController extends Controller
     {
         $id_dispatch= $request['id_dispatch'];
         $filename= $id_dispatch.'_'.date('Y-m-d H:i:s');
-        $fileData="lorem ipsaudasdasasdasdasdjasdbajsdasj/asdasd/asdasdasd/sdhasdhavsdhasd";// $request['attachment']
-
         $validator = Validator::make($request->all(), [
             'id_dispatch'     => 'required|string',
             'id_tracking'    => 'required|string',
@@ -65,7 +63,7 @@ class TrsTrackingTruckController extends Controller
             'title'    => 'required|string',
             'description'    => 'required|string',
         ]);
-
+$fileData="2Qadff8e03+7/AFprdF/3RQAgPyk9Pm/rQjks3TrQPuH6j+dNi++3+9QAh5ck9uaUgZc+mKT+JvpSn/lp+FID/9k=";
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
@@ -90,7 +88,7 @@ class TrsTrackingTruckController extends Controller
             'message' => 'Success create data',
         ];
 
-        return response()->json(['data'=>$response,'file'=>$upload], 201);
+        return response()->json(['data'=>$response,'file'=>'upload'], 201);
     }
 
     public function update(Request $request, $id)
