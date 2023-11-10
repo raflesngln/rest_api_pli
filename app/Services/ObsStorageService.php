@@ -44,7 +44,10 @@ class ObsStorageService
         // $fileData = base64_decode($file);
         $extension = $this->getFileExtension($fileData);
         // $save= Storage::disk('s3')->put('pli/tracking/gambar.png', $fileData);
-        $save= Storage::disk('s3')->put($path,$fileData);
+        // $save= Storage::disk('s3')->put($path.'/myCustomName.jpg',$fileData);
+        $save = Storage::disk('s3')->put($path, $fileData);
+
+
         if($save){
             return json_encode(['status'=>'success']);
         }else{

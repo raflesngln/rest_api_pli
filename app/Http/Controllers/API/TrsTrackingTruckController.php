@@ -85,7 +85,7 @@ class TrsTrackingTruckController extends Controller
         // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
 
         // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
-        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking', $file));
+        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $file));
 
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
@@ -94,7 +94,7 @@ class TrsTrackingTruckController extends Controller
             'title' => $request['title'],
             'kilometer' => isset($request['kilometer'])?$request['kilometer']:9,
             'description' => $request['description'],
-            'attachment' =>$filename,
+            'attachment' =>$filename.'.png',
             'is_done' => $request['is_done'], // You can add this line if 'is_done' is a field in your table
             'is_active' => $request['is_active'], // You can add this line if 'is_active' is a field in your table
         ]);
