@@ -51,12 +51,11 @@ class TrsTrackingTruckController extends Controller
     }
     public function tracking_progress(string|int $id_dispatch)
     {
-
         $data = DB::table('ms_tracking_trucks as a')
                 ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.*')
-                ->leftJoin('trs_tracking_trucks as b', function ($join) {
-                    $join->on('a.id', '=', 'b.id_tracking')
-                        ->where('b.id_dispatch', '=', 'K-08202209080005')
+                ->leftJoin('trs_tracking_trucks as b', 'a.id', '=', 'b.id_tracking')
+                ->where(function ($query) {
+                    $query->where('b.id_dispatch', '=', '$id_dispatch')
                         ->orWhereNull('b.id_dispatch');
                 })
                 ->orderBy('a.id')
