@@ -7,6 +7,7 @@ use App\Http\Resources\TrsTrackingTruckResource;
 use App\Models\TrsTrackingTruck;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Services\ObsStorageService;
 
@@ -46,10 +47,25 @@ class TrsTrackingTruckController extends Controller
         if (!$resp) {
             return response()->json(['message' => 'Tracking not found'], 404);
         }
-
         return response()->json(['data' => $resp],200);
+    }
+    public function tracking_progress(string|int $id_dispatch)
+    {
 
+        $data = DB::table('ms_tracking_trucks as a')
+                ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.*')
+                ->leftJoin('trs_tracking_trucks as b', function ($join) {
+                    $join->on('a.id', '=', 'b.id_tracking')
+                        ->where('b.id_dispatch', '=', 'K-08202209080005')
+                        ->orWhereNull('b.id_dispatch');
+                })
+                ->orderBy('a.id')
+                ->get();
 
+        if (!$data) {
+            return response()->json(['message' => 'Tracking not found'], 404);
+        }
+        return response()->json(['data' => $data],200);
     }
 
     public function store(Request $request)
@@ -81,10 +97,6 @@ class TrsTrackingTruckController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
-        // $extension= $this->ObsstorageService->getFileExtension($id_dispatch);
-        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
-
-        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $attachment));
         $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $file));
 
         $row = TrsTrackingTruck::create([
