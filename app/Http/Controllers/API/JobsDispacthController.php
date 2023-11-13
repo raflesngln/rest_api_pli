@@ -106,7 +106,7 @@ class JobsDispacthController extends Controller
             )
             ->where('j.moda_transport', 'TRUCK')
             ->where('j.cargo_type', 'FCL')
-            ->where('d.id_job', $id)
+            ->where('a.id', $id)
             ->groupBy('d.id')
             ->limit(10)
             ->get();
@@ -130,7 +130,7 @@ class JobsDispacthController extends Controller
             )
             ->where('j.moda_transport', 'TRUCK')
             ->where('j.cargo_type', 'LCL')
-            ->where('a.id_volume', $id)
+            ->where('a.id', $id)
             ->groupBy('v.id_volume')
             ->get();
         $response = JobDispatchResource::collection($results);
