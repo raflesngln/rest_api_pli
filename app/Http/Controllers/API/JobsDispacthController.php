@@ -113,7 +113,7 @@ class JobsDispacthController extends Controller
             ->get();
 
         $response = JobDispatchResource::collection($results);
-        return response()->json(['data' => $response, 'id' => $id,]);
+        return response()->json(['data' => $response, 'id_dispacth' => $id]);
     }
     public function show_lcl($id)
     {
