@@ -135,17 +135,44 @@ class JobsDispacthController extends Controller
         //     ->groupBy('v.id_volume')
         //     ->get();
 
-        $query = DB::table('ms_dispatch as a')
-        ->select('a.id', 'a.id_container_detail', 'a.id_volume', 'a.no_truck', 'a.driver', 'a.pickup_loc', 'a.delivery_loc', 'a.est_time', 'a.activity', 'a.remark', 'a.is_active', 'a.is_delete', 'v.cbm', 'v.commodity', 'j.job_date')
+        // $query = DB::table('ms_dispatch as a')
+        // ->select('a.id', 'a.id_container_detail', 'a.id_volume', 'a.no_truck', 'a.driver', 'a.pickup_loc', 'a.delivery_loc', 'a.est_time', 'a.activity', 'a.remark', 'a.is_active', 'a.is_delete', 'v.cbm', 'v.commodity', 'j.job_date')
+        // ->leftJoin('ms_job_volume as v', 'a.id_volume', '=', 'v.id_volume')
+        // ->leftJoin('ms_job as j', 'j.id_job', '=', 'v.id_job')
+        // ->where('j.moda_transport', '=', 'TRUCK')
+        // ->where('j.cargo_type', '=', 'LCL')
+        // ->groupBy('a.id', 'a.id_container_detail', 'a.id_volume', 'a.no_truck', 'a.driver', 'a.pickup_loc', 'a.delivery_loc', 'a.est_time', 'a.activity', 'a.remark', 'a.is_active', 'a.is_delete', 'v.cbm', 'v.commodity', 'j.job_date', 'v.id_volume');
+        // $results = $query->get();
+
+
+        // $results = DB::table('ms_dispatch as a')
+        // ->select(DB::raw('MAX(a.id) as id, MAX(a.id_volume) as id_volume, MAX(j.customer_name) as customer_name, MAX(a.delivery_loc) as delivery_loc, MAX(a.driver) as driver, MAX(a.est_time) as est_time, COUNT(*) as koli'))
+        // ->leftJoin('ms_job_volume as v', 'a.id_volume', '=', 'v.id_volume')
+        // ->leftJoin('ms_job as j', 'j.id_job', '=', 'v.id_job')
+        // ->where('j.moda_transport', 'TRUCK')
+        // ->where('j.cargo_type', 'LCL')
+        // ->get();
+
+        // $response = JobDispatchResource::collection($results);
+        // return response()->json(['data' => $response, 'id' => $id,]);
+
+        $page =1;
+        $per_page =10;
+        $order_by ='id';
+        $order_direction ='desc';
+
+        $result = DB::table('ms_dispatch as a')
+        ->select(DB::raw('MAX(a.id) as id, MAX(a.id_volume) as id_volume, MAX(j.customer_name) as customer_name, MAX(a.delivery_loc) as delivery_loc, MAX(a.driver) as driver, MAX(a.est_time) as est_time, COUNT(*) as koli'))
         ->leftJoin('ms_job_volume as v', 'a.id_volume', '=', 'v.id_volume')
         ->leftJoin('ms_job as j', 'j.id_job', '=', 'v.id_job')
-        ->where('j.moda_transport', '=', 'TRUCK')
-        ->where('j.cargo_type', '=', 'LCL')
-        ->groupBy('a.id', 'a.id_container_detail', 'a.id_volume', 'a.no_truck', 'a.driver', 'a.pickup_loc', 'a.delivery_loc', 'a.est_time', 'a.activity', 'a.remark', 'a.is_active', 'a.is_delete', 'v.cbm', 'v.commodity', 'j.job_date', 'v.id_volume');
-        $results = $query->get();
+        ->where('j.moda_transport', 'TRUCK')
+        ->where('j.cargo_type', 'LCL')
+        ->where('a.id', $id)
+        ->groupBy('v.id_volume')
+        ->get();
 
-        $response = JobDispatchResource::collection($results);
-        return response()->json(['data' => $response, 'id' => $id,]);
+        return response()->json(['data' => $result], 200);
+
     }
     // public function show($id)
     // {
