@@ -55,7 +55,7 @@ class TrsTrackingTruckController extends Controller
                 ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.*')
                 ->leftJoin('trs_tracking_trucks as b', 'a.id', '=', 'b.id_tracking')
                 ->where(function ($query) {
-                    $query->where('b.id_dispatch', '=', '$id_dispatch')
+                    $query->where('b.id_dispatch', '=', '')
                         ->orWhereNull('b.id_dispatch');
                 })
                 ->orderBy('a.id')

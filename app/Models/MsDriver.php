@@ -14,6 +14,7 @@ class MsDriver extends Model
 {
     use HasFactory,HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'ms_driver';
     /**
      * The attributes that are mass assignable.
      *
