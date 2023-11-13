@@ -66,7 +66,7 @@ class MsDriverController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'driver_no' => 'required|string|unique:ms_drivers',
+            'driver_no' => 'required|string|unique:ms_driver',
             'driver_name' => 'required|string',
             'driver_contact_number1' => 'nullable|string', // Assuming it's optional
             'driver_contact_number2' => 'nullable|string', // Assuming it's optional
@@ -75,7 +75,7 @@ class MsDriverController extends Controller
             'ip' => 'nullable|string', // Assuming it's optional
             'create_by' => 'nullable|string', // Assuming it's optional
             'vendor_id' => 'nullable|string', // Assuming it's optional
-            'email' => 'required|string|email|unique:ms_drivers',
+            'email' => 'required|string|email|unique:ms_driver',
             'password' => 'required|string',
         ]);
 
