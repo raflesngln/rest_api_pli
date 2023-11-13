@@ -40,17 +40,17 @@ class JobsDispacthController extends Controller
             $order_by = $request->query('order_by');
             $order_direction = $request->query('order_direction');
 
-            $results = DB::table('ms_dispatch as a')
+            $query = DB::table('ms_dispatch as a')
+            ->select('a.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', DB::raw('1 as koli'))
             ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
             ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
             ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
-            ->select('j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', DB::raw('1 as koli'))
-            ->where('j.moda_transport', 'TRUCK')
-            ->where('j.cargo_type', 'FCL')
-            ->groupBy('d.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time')
-            ->limit(10)
-            ->get();
+            ->where('j.moda_transport', '=', 'TRUCK')
+            ->where('j.cargo_type', '=', 'FCL')
+            ->groupBy('a.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', 'd.id')
+            ->limit(10);
 
+            $results = $query->get();
 
         return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page], 200);
     }
