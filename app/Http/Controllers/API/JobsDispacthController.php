@@ -91,29 +91,48 @@ class JobsDispacthController extends Controller
     public function show_fcl($id)
     {
 
-        $results = DB::table('ms_dispatch as a')
-            ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
-            ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
-            ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
-            ->select(
-                'd.id',
-                DB::raw('MAX(a.id) as id_dispatch'),
-                DB::raw('MAX(j.id_job) as id_job'),
-                DB::raw('MAX(j.customer_name) as customer_name'),
-                DB::raw('MAX(a.delivery_loc) as delivery_loc'),
-                DB::raw('MAX(a.driver) as driver'),
-                DB::raw('MAX(a.est_time) as est_time'),
-                DB::raw('COUNT(*) as koli')
-            )
-            ->where('j.moda_transport', 'TRUCK')
-            ->where('j.cargo_type', 'FCL')
-            ->where('a.id', $id)
-            ->groupBy('d.id')
-            ->limit(10)
-            ->get();
+        // $results = DB::table('ms_dispatch as a')
+        //     ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
+        //     ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
+        //     ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
+        //     ->select(
+        //         DB::raw('MAX(a.id) as id_dispatch'),
+        //         DB::raw('MAX(j.id_job) as id_job'),
+        //         DB::raw('MAX(j.customer_name) as customer_name'),
+        //         DB::raw('MAX(a.delivery_loc) as delivery_loc'),
+        //         DB::raw('MAX(a.driver) as driver'),
+        //         DB::raw('MAX(a.est_time) as est_time'),
+        //         DB::raw('COUNT(*) as koli')
+        //     )
+        //     ->where('j.moda_transport', 'TRUCK')
+        //     ->where('j.cargo_type', 'FCL')
+        //     ->where('a.id', $id)
+        //     ->groupBy('d.id')
+        //     ->limit(10)
+        //     ->get();
 
-        $response = JobDispatchResource::collection($results);
-        return response()->json(['data' => $response, 'id_dispacth' => $id]);
+        // $response = JobDispatchResource::collection($results);
+        // return response()->json(['data' => $response, 'id_dispacth  ' => $id]);
+        $page = 1;
+        $per_page = 11;
+        $order_by = 'id';
+        $order_direction ='asc';
+
+        $query = DB::table('ms_dispatch as a')
+        ->select('a.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', DB::raw('1 as koli'))
+        ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
+        ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
+        ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
+        ->where('j.moda_transport', '=', 'TRUCK')
+        ->where('j.cargo_type', '=', 'FCL')
+        ->where('a.id', $id)
+        ->groupBy('a.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', 'd.id')
+        ->limit(10);
+
+        $results = $query->get();
+
+    return response()->json(['data' => $results, 'id_dispacth' => $id], 200);
+
     }
     public function show_lcl($id)
     {
