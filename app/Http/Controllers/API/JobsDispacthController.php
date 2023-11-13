@@ -97,6 +97,7 @@ class JobsDispacthController extends Controller
             ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
             ->select(
                 'd.id',
+                DB::raw('MAX(a.id) as id_dispatch'),
                 DB::raw('MAX(j.id_job) as id_job'),
                 DB::raw('MAX(j.customer_name) as customer_name'),
                 DB::raw('MAX(a.delivery_loc) as delivery_loc'),
