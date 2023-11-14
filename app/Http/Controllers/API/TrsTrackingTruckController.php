@@ -70,22 +70,24 @@ class TrsTrackingTruckController extends Controller
     public function store(Request $request)
     {
         $id_dispatch= $request['id_dispatch'];
+        $id_tracking= $request['id_tracking'];
 
         $file = $request->file('attachment');
         // $file=base64_decode($file);
         $fileName = $file->getClientOriginalName();
-
-
         $attachment = $request['attachment'];
         $attachment = base64_decode($attachment);
 
         $filename= $id_dispatch.'_'.date('YmdHis');
-        // $fileContents = file_get_contents($attachment);
 
-        // var_dump($fileName);
-        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking', $file));
-        // exit();
-
+        // Check if id_dispatch and id tracking is exists not save
+        $checkExists = DB::table('trs_tracking_trucks')
+                    ->where('id_dispatch', '=', $id_dispatch)
+                    ->where('id_tracking', '=', $id_tracking)
+                    ->get();
+        if(count($checkExists) > 0){
+            return response()->json(['data'=>[],'message'=>'Tracking with id dispatch an did dispatch has exists'], 404);
+        }
         $validator = Validator::make($request->all(), [
             'id_dispatch'     => 'required|string',
             'id_tracking'    => 'required|string',
