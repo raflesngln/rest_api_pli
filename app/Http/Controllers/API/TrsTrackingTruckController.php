@@ -49,21 +49,29 @@ class TrsTrackingTruckController extends Controller
         }
         return response()->json(['data' => $resp],200);
     }
-    public function tracking_progress(string|int $id_dispatch)
+    public function tracking_progress(string|int $id)
     {
+
         // $sql = "select a.id as id_tracking, a.sorting, a.title, a.description,b.id as id_track,b.id_dispatch,
         // b.id_tracking as id_track,b.title as title_track,b.tracking_date,b.description as desc_track,b.attachment,
         // b.is_done,b.is_active,b.kilometer,b.created_at,b.updated_at
         // from ms_tracking_trucks a
         // left join trs_tracking_trucks b on a.id = b.id_tracking and b.id_dispatch = '2' order by a.id asc";
         // $data = DB::select($sql);
-
+        // $data = DB::table('ms_tracking_trucks as a')
+        // ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch', 'b.id_tracking as id_track', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
+        // ->leftJoin('trs_tracking_trucks as b', function ($join) {
+        //     $join->on('a.id', '=', 'b.id_tracking')
+        //         ->where('b.id_dispatch', $id);
+        // })
+        // ->orderBy('a.id', 'asc')
+        // ->get();
         $data = DB::table('ms_tracking_trucks as a')
-        ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch', 'b.id_tracking as id_track', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
-        ->leftJoin('trs_tracking_trucks as b', function ($join) {
-            $join->on('a.id', '=', 'b.id_tracking')
-                ->where('b.id_dispatch', '=', '2');
-        })
+            ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
+            ->leftJoin('trs_tracking_trucks as b', function ($join) use ($id) {
+                $join->on('a.id', '=', 'b.id_tracking')
+                    ->where('b.id_dispatch', '=', $id);
+            })
         ->orderBy('a.id', 'asc')
         ->get();
 

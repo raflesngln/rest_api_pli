@@ -60,7 +60,7 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/trs_truck_tracking', [TrsTrackingTruckController::class, 'index']);
         Route::get('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'show']);
-        Route::get('/tracking_progress/{id_dispatch}', [TrsTrackingTruckController::class, 'tracking_progress']);
+        Route::get('/tracking_progress/{id}', [TrsTrackingTruckController::class, 'tracking_progress']);
         Route::post('/trs_truck_tracking', [TrsTrackingTruckController::class, 'store']);
         Route::put('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'update']);
         Route::delete('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'destroy']);
