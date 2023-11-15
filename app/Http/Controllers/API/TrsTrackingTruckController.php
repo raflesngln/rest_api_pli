@@ -76,8 +76,8 @@ class TrsTrackingTruckController extends Controller
 
             $items=array(
                 "id_tracking"=> $value->id_tracking,
-                "sorting"=> $value->id_tracking,
-                "title"=> $value->id_tracking,
+                "sorting"=> $value->sorting,
+                "title"=> $value->title,
                 "description"=> $value->description,
                 "id_track"=> $value->id_track,
                 "id_dispatch"=> $value->id_dispatch,
