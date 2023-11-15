@@ -48,7 +48,7 @@ class ObsStorageService
         $save = Storage::disk('s3')->put($path, $fileData);
 
         if($save){
-            return json_encode(['status'=>'success']);
+            return json_encode(['status'=>'success','path_file'=>$save]);
         }else{
             return json_encode(['status'=>'false']);
         }

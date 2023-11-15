@@ -53,21 +53,6 @@ class TrsTrackingTruckController extends Controller
     }
     public function tracking_progress(string|int $id)
     {
-
-        // $sql = "select a.id as id_tracking, a.sorting, a.title, a.description,b.id as id_track,b.id_dispatch,
-        // b.id_tracking as id_track,b.title as title_track,b.tracking_date,b.description as desc_track,b.attachment,
-        // b.is_done,b.is_active,b.kilometer,b.created_at,b.updated_at
-        // from ms_tracking_trucks a
-        // left join trs_tracking_trucks b on a.id = b.id_tracking and b.id_dispatch = '2' order by a.id asc";
-        // $data = DB::select($sql);
-        // $data = DB::table('ms_tracking_trucks as a')
-        // ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch', 'b.id_tracking as id_track', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
-        // ->leftJoin('trs_tracking_trucks as b', function ($join) {
-        //     $join->on('a.id', '=', 'b.id_tracking')
-        //         ->where('b.id_dispatch', $id);
-        // })
-        // ->orderBy('a.id', 'asc')
-        // ->get();
         $data = DB::table('ms_tracking_trucks as a')
             ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
             ->leftJoin('trs_tracking_trucks as b', function ($join) use ($id) {
@@ -77,10 +62,40 @@ class TrsTrackingTruckController extends Controller
         ->orderBy('a.id', 'asc')
         ->get();
 
+        $file='pli/prisma.png';
+        $filebase64= 'aaa';//json_decode($this->OBS->getFileBase64($file));
+
         if (!$data) {
             return response()->json(['message' => 'Tracking not found'], 404);
         }
-        return response()->json(['data' => $data],200);
+
+        $arrData=[];
+        foreach ($data as $key => $value) {
+            $attachment=$value->attachment.'/'.'track_5_20231115093132';
+            $imageTrack= ($attachment)?json_decode($this->OBS->getFileBase64($attachment)):'';
+
+            $items=array(
+                "id_tracking"=> $value->id_tracking,
+                "sorting"=> $value->id_tracking,
+                "title"=> $value->id_tracking,
+                "description"=> $value->description,
+                "id_track"=> $value->id_track,
+                "id_dispatch"=> $value->id_dispatch,
+                "title_track"=> $value->title_track,
+                "tracking_date"=> $value->tracking_date,
+                "desc_track"=> $value->desc_track,
+                "attachment"=> $value->attachment,
+                "image"=> $imageTrack,
+                "is_done"=> $value->is_done,
+                "is_active"=> $value->is_active,
+                "kilometer"=> $value->kilometer,
+                "created_at"=> $value->created_at,
+                "updated_at"=> $value->updated_at
+            );
+            $arrData[]=$items;
+        }
+        return response()->json(['data' => $arrData,'img'=>$data],200);
+        // return response()->json(['data' => $data,'img'=>$filebase64],200);
     }
 
     public function store(Request $request)
@@ -95,6 +110,10 @@ class TrsTrackingTruckController extends Controller
         $attachment = base64_decode($attachment);
 
         $filename= 'track_'.$id_dispatch.'_'.date('YmdHis');
+
+        // $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
+        // echo ( $upload->path_file);
+        // exit();
 
         // Check if id_dispatch and id tracking is exists not save
         $checkExists = DB::table('trs_tracking_trucks')
@@ -114,9 +133,7 @@ class TrsTrackingTruckController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
-        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $file));
-        $upload=$this->OBS->uploadFile('pli/tracking/'.$filename, $file);
-
+        $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
             'id_tracking' => $request['id_tracking'],
@@ -124,7 +141,7 @@ class TrsTrackingTruckController extends Controller
             'title' => $request['title'],
             'kilometer' => isset($request['kilometer'])?$request['kilometer']:9,
             'description' => $request['description'],
-            'attachment' =>$filename.'.png',
+            'attachment' =>$upload->path_file,
             'is_done' => $request['is_done'], // You can add this line if 'is_done' is a field in your table
             'is_active' => $request['is_active'], // You can add this line if 'is_active' is a field in your table
         ]);
