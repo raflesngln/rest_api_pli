@@ -47,13 +47,11 @@ class ObsStorageService
         // $save= Storage::disk('s3')->put($path.'/myCustomName.jpg',$fileData);
         $save = Storage::disk('s3')->put($path, $fileData);
 
-
         if($save){
             return json_encode(['status'=>'success']);
         }else{
             return json_encode(['status'=>'false']);
         }
-
     }
 
     public function delete($path)

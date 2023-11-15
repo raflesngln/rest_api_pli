@@ -14,11 +14,13 @@ use App\Services\ObsStorageService;
 
 class TrsTrackingTruckController extends Controller
 {
-    protected $ObsstorageService;
-    public function __construct(ObsStorageService $ObsstorageService)
+    protected $OBS;
+    // public function __construct(ObsStorageService $ObsstorageService)
+    public function __construct(ObsStorageService $obs)
     {
         $this->middleware('auth:sanctum');
-        $this->ObsstorageService = $ObsstorageService;
+        $this->OBS = $obs;
+        // $this->ObsstorageService = $ObsstorageService;
     }
 
     public function index(Request $request)
@@ -88,11 +90,11 @@ class TrsTrackingTruckController extends Controller
 
         $file = $request->file('attachment');
         // $file=base64_decode($file);
-        $fileName = $file->getClientOriginalName();
+        // $fileName = $file->getClientOriginalName();
         $attachment = $request['attachment'];
         $attachment = base64_decode($attachment);
 
-        $filename= $id_dispatch.'_'.date('YmdHis');
+        $filename= 'track_'.$id_dispatch.'_'.date('YmdHis');
 
         // Check if id_dispatch and id tracking is exists not save
         $checkExists = DB::table('trs_tracking_trucks')
@@ -112,7 +114,8 @@ class TrsTrackingTruckController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
-        $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $file));
+        // $upload=json_decode($this->ObsstorageService->uploadFile('pli/tracking/'.$filename, $file));
+        $upload=$this->OBS->uploadFile('pli/tracking/'.$filename, $file);
 
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
@@ -131,7 +134,7 @@ class TrsTrackingTruckController extends Controller
             'message' => 'Success create data',
         ];
 
-        return response()->json(['data'=>$response,'file'=>'upload'], 201);
+        return response()->json(['data'=>$response,'file'=>$upload], 201);
     }
 
     public function update(Request $request, $id)
