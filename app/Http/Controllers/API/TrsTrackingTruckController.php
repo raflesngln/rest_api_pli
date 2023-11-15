@@ -71,7 +71,7 @@ class TrsTrackingTruckController extends Controller
 
         $arrData=[];
         foreach ($data as $key => $value) {
-            $attachment=$value->attachment.'/'.'track_5_20231115093132';
+            $attachment=$value->attachment;
             $imageTrack= ($attachment)?json_decode($this->OBS->getFileBase64($attachment)):'';
 
             $items=array(
