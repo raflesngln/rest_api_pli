@@ -85,7 +85,7 @@ class TrsTrackingTruckController extends Controller
                 "tracking_date"=> $value->tracking_date,
                 "desc_track"=> $value->desc_track,
                 "attachment"=> $value->attachment,
-                "image"=> $imageTrack,
+                "image"=> $imageTrack->base64,
                 "is_done"=> $value->is_done,
                 "is_active"=> $value->is_active,
                 "kilometer"=> $value->kilometer,
