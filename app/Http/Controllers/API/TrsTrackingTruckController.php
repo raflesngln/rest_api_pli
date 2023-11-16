@@ -140,6 +140,7 @@ class TrsTrackingTruckController extends Controller
             'id_tracking' => $request['id_tracking'],
             'tracking_date' => $request['tracking_date'],
             'title' => $request['title'],
+            'created_by' => $request['created_by'],
             'kilometer' => isset($request['kilometer'])?$request['kilometer']:9,
             'description' => $request['description'],
             'attachment' =>$upload->path_file,
