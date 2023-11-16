@@ -54,7 +54,7 @@ class TrsTrackingTruckController extends Controller
     public function tracking_progress(string|int $id)
     {
         $data = DB::table('ms_tracking_trucks as a')
-            ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
+            ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch','b.created_by', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
             ->leftJoin('trs_tracking_trucks as b', function ($join) use ($id) {
                 $join->on('a.id', '=', 'b.id_tracking')
                     ->where('b.id_dispatch', '=', $id);

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('id_dispatch');
             $table->bigInteger('id_tracking');
+            $table->string('created_by');
             $table->imestamp('tracking_date')->nullable();
             $table->string('title');
             $table->string('kilometer');
