@@ -23,6 +23,8 @@ class TrsTrackingTruck extends Model
         'id_tracking',
         'tracking_date',
         'title',
+        'koli',
+        'pic',
         'kilometer',
         'description',
         'attachment',

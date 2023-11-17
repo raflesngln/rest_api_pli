@@ -101,6 +101,8 @@ class TrsTrackingTruckController extends Controller
 
     public function store(Request $request)
     {
+        // echo 'okoko'; exit();
+
         $id_dispatch= $request['id_dispatch'];
         $id_tracking= $request['id_tracking'];
 
@@ -144,6 +146,8 @@ class TrsTrackingTruckController extends Controller
             'kilometer' => isset($request['kilometer'])?$request['kilometer']:9,
             'description' => $request['description'],
             'attachment' =>$upload->path_file,
+            'koli' =>$request->koli,
+            'pic' =>$request->pic,
             'is_done' => $request['is_done'], // You can add this line if 'is_done' is a field in your table
             'is_active' => $request['is_active'], // You can add this line if 'is_active' is a field in your table
         ]);

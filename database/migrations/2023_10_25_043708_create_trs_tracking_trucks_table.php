@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('created_by');
             $table->imestamp('tracking_date')->nullable();
             $table->string('title');
+            $table->float('koli');
+            $table->string('pic');
             $table->string('kilometer');
             $table->string('description');
             $table->text('attachment')->nullable();
