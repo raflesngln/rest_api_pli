@@ -25,6 +25,7 @@ class TrsTrackingTruck extends Model
         'title',
         'koli',
         'pic',
+        'created_by',
         'kilometer',
         'description',
         'attachment',
