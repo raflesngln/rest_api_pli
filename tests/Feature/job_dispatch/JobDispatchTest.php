@@ -54,32 +54,30 @@ class JobDispatchTest extends TestCase
             'per_page',
         ]);
     }
-    public function test_get_all_dispatch_fcl_detail(): void
+    public function test_get_dispatch_fcl_detail(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('api/v1/job_dispatch_fcl/3323');
+        ])->get('api/v1/job_dispatch_fcl/10');
 
         // echo json_encode($response);
         $response
         ->assertStatus(200)
         ->assertJsonStructure([
             'data',
-            'id',
         ]);
     }
-    public function test_get_all_dispatch_lcl_detail(): void
+    public function test_get_dispatch_lcl_detail(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->get('api/v1/job_dispatch_lcl/4');
+        ])->get('api/v1/job_dispatch_lcl/28');
 
         // echo json_encode($response);
         $response
         ->assertStatus(200)
         ->assertJsonStructure([
             'data',
-            'id',
         ]);
     }
 

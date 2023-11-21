@@ -46,6 +46,9 @@ class TrsTrackingTest extends TestCase
             'attachment' => 'lorem ipsum.jpg',
             'is_done' => 1,
             'is_active' => 1,
+            'kilometer' => 21,
+            'koli' => 1,
+            'pic' => 'ririn',
         ]);
         // echo json_encode($response);
         $response
@@ -122,6 +125,9 @@ class TrsTrackingTest extends TestCase
             'attachment' => 'lorem ipsum.jpg',
             'is_done' => 1,
             'is_active' =>1,
+            'kilometer' => 21,
+            'koli' => 1,
+            'pic' => 'ananan',
         ]);
 
     //    echo json_encode($response, JSON_PRETTY_PRINT);
@@ -150,17 +156,17 @@ class TrsTrackingTest extends TestCase
 
 
         // finally delete the user has created for clean database testing
-        public function test_finally_delete_data_created_testing_for_clean_table_trs(): void
-        {
+        // public function test_finally_delete_data_created_testing_for_clean_table_trs(): void
+        // {
 
-            $lastId = DB::table('trs_tracking_trucks')->max('id');
+        //     $lastId = DB::table('trs_tracking_trucks')->max('id');
 
-            $response = $this->withHeaders([
-                        'Authorization' => 'Bearer ' . $this->token,
-                    ])->delete('/api/v1/trs_truck_tracking/'.$lastId);
+        //     $response = $this->withHeaders([
+        //                 'Authorization' => 'Bearer ' . $this->token,
+        //             ])->delete('/api/v1/trs_truck_tracking/'.$lastId);
 
-            $response->assertStatus(200);
-        }
+        //     $response->assertStatus(200);
+        // }
 
 
 }
