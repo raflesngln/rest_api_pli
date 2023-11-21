@@ -21,12 +21,17 @@ class JobsDispacthController extends Controller
         // $this->middleware('auth:sanctum');
     }
 
+/**
+ *List Data FCL
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function index_fcl(Request $request)
     {
         // Set up validation rules for query parameters
         $validator = Validator::make($request->all(), [
-            'page' => 'required',
-            'per_page' => 'required',
+            'page' => 'required|integer',
+            'per_page' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -55,12 +60,17 @@ class JobsDispacthController extends Controller
         return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page], 200);
     }
 
+/**
+ * List Data LCL
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function index_lcl(Request $request)
     {
         // Set up validation rules for query parameters
         $validator = Validator::make($request->all(), [
-            'page' => 'required',
-            'per_page' => 'required',
+            'page' => 'required|integer',
+            'per_page' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -88,35 +98,13 @@ class JobsDispacthController extends Controller
         return response()->json(['data' => $result, 'page' => $page, 'per_page' => $per_page], 200);
     }
 
+    /**
+ * Detail FCL
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function show_fcl($id)
     {
-
-        // $results = DB::table('ms_dispatch as a')
-        //     ->leftJoin('ms_container_detail as d', 'a.id_container_detail', '=', 'd.id')
-        //     ->leftJoin('ms_job_container as c', 'c.id_job_container', '=', 'd.id_job_container')
-        //     ->leftJoin('ms_job as j', 'j.id_job', '=', 'c.id_job')
-        //     ->select(
-        //         DB::raw('MAX(a.id) as id_dispatch'),
-        //         DB::raw('MAX(j.id_job) as id_job'),
-        //         DB::raw('MAX(j.customer_name) as customer_name'),
-        //         DB::raw('MAX(a.delivery_loc) as delivery_loc'),
-        //         DB::raw('MAX(a.driver) as driver'),
-        //         DB::raw('MAX(a.est_time) as est_time'),
-        //         DB::raw('COUNT(*) as koli')
-        //     )
-        //     ->where('j.moda_transport', 'TRUCK')
-        //     ->where('j.cargo_type', 'FCL')
-        //     ->where('a.id', $id)
-        //     ->groupBy('d.id')
-        //     ->limit(10)
-        //     ->get();
-
-        // $response = JobDispatchResource::collection($results);
-        // return response()->json(['data' => $response, 'id_dispacth  ' => $id]);
-        $page = 1;
-        $per_page = 11;
-        $order_by = 'id';
-        $order_direction ='asc';
 
         $query = DB::table('ms_dispatch as a')
         ->select('a.id', 'j.id_job', 'j.customer_name', 'a.delivery_loc', 'a.driver', 'a.est_time', DB::raw('1 as koli'))
@@ -134,6 +122,12 @@ class JobsDispacthController extends Controller
     return response()->json(['data' => $results, 'id_dispacth' => $id], 200);
 
     }
+
+    /**
+ * Detail LCL
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function show_lcl($id)
     {
         $result = DB::table('ms_dispatch as a')

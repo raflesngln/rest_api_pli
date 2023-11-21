@@ -24,11 +24,26 @@ class MsDriverController extends Controller
         $this->ObsstorageService = $ObsstorageService;
     }
 
-    public function index(Request $request)
+/**
+ * Display List Data
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
+ public function index(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'page' => 'required:integer',
+            'per_page' => 'required:integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], 400); // Return a 400 Bad Request response for validation errors
+        }
 
         // $page = $request->query('page');
-        $page = $request->query('page', 1);
+        $page = $request->query('page');
         $per_page = $request->query('per_page');
         $order_by = $request->query('order_by');
         $order_direction = $request->query('order_direction');
@@ -43,7 +58,11 @@ class MsDriverController extends Controller
 
         return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
-
+/**
+ * Display Detail Data
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function show($id)
     {
         $file='pli/prisma.png';
@@ -60,7 +79,11 @@ class MsDriverController extends Controller
         return response()->json(['data' => $resp,'file'=>$filebase64],200);
     }
 
-
+/**
+ * Create New Data
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function store(Request $request)
     {
 
@@ -104,6 +127,11 @@ class MsDriverController extends Controller
         return response()->json(['data' => $response], 201);
     }
 
+/**
+ * Updateof Data
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function update(Request $request, $driver_no)
     {
         // Update an existing user
@@ -118,6 +146,11 @@ class MsDriverController extends Controller
         return response()->json(['data'=>$resp,'message'=>'success update data'],200);
     }
 
+    /**
+ * Delete of Data
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function destroy($driver_no)
     {
         // Delete a user

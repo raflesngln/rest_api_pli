@@ -19,10 +19,23 @@ class MsTrackingTruckController extends Controller
         $this->middleware('auth:sanctum');
     }
 
+/**
+ * List Data Trucking
+ * @return \Illuminate\Http\Response
+*/
     public function index(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'page' => 'required|integer',
+            'per_page' => 'required|integer',
+        ]);
 
-        // $page = $request->query('page');
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], 400); // Return a 400 Bad Request response for validation errors
+        }
+
         $page = $request->query('page', 1);
         $per_page = $request->query('per_page');
         $order_by = $request->query('order_by');
@@ -38,6 +51,10 @@ class MsTrackingTruckController extends Controller
         return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
     }
 
+    /**
+ * Detail Trucking
+ * @return \Illuminate\Http\Response
+*/
     public function show($id)
     {
         // Retrieve a single user by ID
@@ -51,6 +68,10 @@ class MsTrackingTruckController extends Controller
         return new MsTrackingTruckResource($resp);
     }
 
+    /**
+ * Create New Trucking
+ * @return \Illuminate\Http\Response
+*/
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -77,6 +98,10 @@ class MsTrackingTruckController extends Controller
         return response()->json($response, 201); // Return the response with a 201 status code
     }
 
+    /**
+ * Update Data Trucking
+ * @return \Illuminate\Http\Response
+*/
     public function update(Request $request, $id)
     {
         $input = $request->all();
@@ -104,6 +129,10 @@ class MsTrackingTruckController extends Controller
         }
     }
 
+    /**
+ * Delete Data Trucking
+ * @return \Illuminate\Http\Response
+*/
     public function destroy($id)
     {
         // Delete a data

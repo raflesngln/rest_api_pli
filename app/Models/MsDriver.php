@@ -41,7 +41,7 @@ class MsDriver extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = ['password'];
 
     /**
      * The attributes that should be cast.

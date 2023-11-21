@@ -22,9 +22,22 @@ class TrsTrackingTruckController extends Controller
         $this->OBS = $obs;
         // $this->ObsstorageService = $ObsstorageService;
     }
-
+/**
+ * List Data Tracking Trucks
+ * @return \Illuminate\Http\Response
+*/
     public function index(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'page' => 'required|integer',
+            'per_page' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], 400); // Return a 400 Bad Request response for validation errors
+        }
 
         $page = $request->query('page');
         $per_page = $request->query('per_page');
@@ -40,7 +53,10 @@ class TrsTrackingTruckController extends Controller
         return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
 
     }
-
+/**
+ * Detail Tracking Trucks
+ * @return \Illuminate\Http\Response
+*/
     public function show(int $id)
     {
 
@@ -51,6 +67,11 @@ class TrsTrackingTruckController extends Controller
         }
         return response()->json(['data' => $resp],200);
     }
+
+/**
+ * Progress of Tracking Dispatch
+ * @return \Illuminate\Http\Response
+*/
     public function tracking_progress(Request $request, $id)
     {
         $data = DB::table('ms_tracking_trucks as a')
@@ -99,6 +120,11 @@ class TrsTrackingTruckController extends Controller
         // return response()->json(['data' => $data,'img'=>$filebase64],200);
     }
 
+
+/**
+ * New Data Tracking
+ * @return \Illuminate\Http\Response
+*/
     public function store(Request $request)
     {
         // echo 'okoko'; exit();
@@ -160,6 +186,10 @@ class TrsTrackingTruckController extends Controller
         return response()->json(['data'=>$response,'file'=>$upload], 201);
     }
 
+    /**
+ * Update Data Tracking
+ * @return \Illuminate\Http\Response
+*/
     public function update(Request $request, $id)
     {
         $resp = TrsTrackingTruck::where('id', $id)->first();
@@ -171,6 +201,10 @@ class TrsTrackingTruckController extends Controller
         return response()->json(['data'=>$resp, 'message' => 'success update data'],200);
     }
 
+    /**
+ * DeleteTracking
+ * @return \Illuminate\Http\Response
+*/
     public function destroy($id)
     {
         // Delete a user

@@ -47,9 +47,13 @@ class AuthController extends Controller
             // ], 409);
         }
     }
-    /**
-     * @unauthenticated
-     */
+
+/**
+ * @unauthenticated
+ * Login Drivers to Get TOKEN
+ * @queryParam team int The team to pull tasks for.
+ * @return \Illuminate\Http\Response
+*/
     public function login(Request $request)
     {
         $fields = $request->validate([
@@ -77,6 +81,10 @@ class AuthController extends Controller
         return response($response, 200);
     }
 
+/**
+ * Profile Driver login
+ * @return \Illuminate\Http\Response
+*/
     public function profile(Request $request)
     {
 
