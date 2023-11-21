@@ -51,7 +51,7 @@ class TrsTrackingTruckController extends Controller
         }
         return response()->json(['data' => $resp],200);
     }
-    public function tracking_progress(string|int $id)
+    public function tracking_progress(Request $request, $id)
     {
         $data = DB::table('ms_tracking_trucks as a')
             ->select('a.id as id_tracking', 'a.sorting', 'a.title', 'a.description', 'b.id as id_track', 'b.id_dispatch','b.created_by', 'b.title as title_track', 'b.tracking_date', 'b.description as desc_track', 'b.attachment', 'b.is_done', 'b.is_active', 'b.kilometer', 'b.created_at', 'b.updated_at')
