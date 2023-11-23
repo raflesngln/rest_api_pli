@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/ms_driver', [MsDriverController::class, 'store']);
         Route::put('/ms_driver/{id}', [MsDriverController::class, 'update']);
         Route::delete('/ms_driver/{id}', [MsDriverController::class, 'destroy']);
+        Route::put('/ms_driver/update_password/{id}', [MsDriverController::class, 'update_password']);
 
         Route::get('/ms_tracking', [MsTrackingTruckController::class, 'index']);
         Route::get('/ms_tracking/{id}', [MsTrackingTruckController::class, 'show']);

@@ -146,6 +146,41 @@ class MsDriverController extends Controller
         return response()->json(['data'=>$resp,'message'=>'success update data'],200);
     }
 
+    public function update_password(Request $request, $id)
+    {
+        $driver = MsDriver::where('driver_no', $id)->first();
+        if ($driver) {
+            $old_pass = $request->old_password;
+            $new_pass = $request->new_password;
+            $new_pass_retype = $request->retype_new_password;
+            $passdb = $driver->password;
+               // Check password
+                if (password_verify($old_pass, $passdb)) {
+
+                    // how to validate the new_password and retype_new_password must same in  laravel =>
+                    $validator = Validator::make($request->all(), [
+                        'old_password' => 'required|string',
+                        'new_password' => 'required|string|min:6',
+                        'retype_new_password' => 'required|string|same:new_password',
+                    ]);
+
+                    if ($validator->fails()) {
+                        return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
+                    }
+
+                    // check if new_pass and new_pass_retype is same and greather then 5
+                    $driver->password =bcrypt($new_pass);
+                    $driver->save();
+                    return response()->json(['message'=>'success update Password'],200);
+                } else {
+                    return response()->json(['message'=>'old pass wrong'],404);
+                }
+            // $driver->save();
+        } else{
+            return response()->json(['message'=>'no driver foun'],404);
+        }
+    }
+
     /**
  * Delete of Data
  * @queryParam team int The team to pull tasks for.
