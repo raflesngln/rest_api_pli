@@ -51,13 +51,14 @@ class OceanExportController extends Controller
     public function fetchDispatches(Request $request)
     {
         // Default values if parameters are not provided
-        $email = $request->query('email');
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page', 10);
         $orderBy = $request->input('order_by', 'driver_name'); // Default column to order by
         $orderDirection = $request->input('order_direction', 'asc'); // Default order direction
+        $emailDriver = $request->input('email','');
 
-        if (!isset($email)) {
+
+        if (!isset($emailDriver)) {
             // Handle the case where `email` is not present in the query string
             return response()->json(['error' => 'Missing email parameter'], 400); // Or redirect, use default value, etc.
         }
@@ -66,8 +67,10 @@ class OceanExportController extends Controller
             'driver',
             'containerDetail.jobContainer.job'
         ])->whereHas('driver', function ($query) {
-            $query->where('email', $email);
+            $query->where('email', '$emailDriver');
+            // use of unassigned variable '$email'
         });
+
 
         // Apply ordering
         $query->orderBy($orderBy, $orderDirection);
