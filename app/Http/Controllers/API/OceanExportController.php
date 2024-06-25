@@ -51,6 +51,7 @@ class OceanExportController extends Controller
     public function fetchDispatches(Request $request)
     {
         // Default values if parameters are not provided
+        $email = $request->query('email');
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page', 10);
         $orderBy = $request->input('order_by', 'driver_name'); // Default column to order by
@@ -69,7 +70,12 @@ class OceanExportController extends Controller
         // Pagination
         $dispatches = $query->paginate($perPage, ['*'], 'page', $page);
 
-        return OceanExportResource::collection($dispatches);
+        // return OceanExportResource::collection($dispatches);
+        $dispatches = OceanExportResource::collection($dispatches);
+        // Add variable data as a property to the collection
+        $dispatches->additional = ['email' => $email,'page'=>$page];
+        return $dispatches;
+
     }
     /**
      * Show the form for creating a new resource.
