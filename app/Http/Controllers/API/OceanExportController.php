@@ -67,7 +67,7 @@ class OceanExportController extends Controller
             'driver',
             'containerDetail.jobContainer.job'
         ])->whereHas('driver', function ($query) {
-            $query->where('email', '$email');
+            $query->where('email', 'mahmud@gmail.com');
             // use of unassigned variable '$email'
         });
 
