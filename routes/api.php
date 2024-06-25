@@ -9,6 +9,7 @@ use App\Http\Controllers\API\MsDriverController;
 use App\Http\Controllers\API\MsTrackingTruckController;
 use App\Http\Controllers\API\JobsDispacthController;
 use App\Http\Controllers\API\TrsTrackingTruckController;
+use App\Http\Controllers\API\OceanExportController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -65,5 +66,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/trs_truck_tracking', [TrsTrackingTruckController::class, 'store']);
         Route::put('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'update']);
         Route::delete('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'destroy']);
+
+        Route::get('/ocean_export', [OceanExportController::class, 'fetchDispatches']);
+        Route::get('/ocean_export/{id}', [OceanExportController::class, 'show']);
+        Route::post('/ocean_export', [OceanExportController::class, 'store']);
+        Route::put('/ocean_export/{id}', [OceanExportController::class, 'update']);
+        Route::delete('/ocean_export/{id}', [OceanExportController::class, 'destroy']);
     });
 });
