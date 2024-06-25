@@ -55,10 +55,10 @@ class OceanExportController extends Controller
         $perPage = $request->input('per_page', 10);
         $orderBy = $request->input('order_by', 'driver_name'); // Default column to order by
         $orderDirection = $request->input('order_direction', 'asc'); // Default order direction
-        $emailDriver = $request->input('email','');
+        $email = $request->query('email','');
 
 
-        if (!isset($emailDriver)) {
+        if (!isset($email)) {
             // Handle the case where `email` is not present in the query string
             return response()->json(['error' => 'Missing email parameter'], 400); // Or redirect, use default value, etc.
         }
@@ -67,7 +67,7 @@ class OceanExportController extends Controller
             'driver',
             'containerDetail.jobContainer.job'
         ])->whereHas('driver', function ($query) {
-            $query->where('email', '$emailDriver');
+            $query->where('email', '$email');
             // use of unassigned variable '$email'
         });
 
