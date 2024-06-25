@@ -12,11 +12,9 @@
 
 ## run project
 ```
-php artisan serve --host=0.0.0.0 --port=8080
+    php artisan serve --host=0.0.0.0 --port=8080
+    php artisan make:migration create_trs_ocean_export
 
 ```
 
 
-```
-php artisan make:migration create_trs_ocean_export
-```
