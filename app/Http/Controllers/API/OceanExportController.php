@@ -57,11 +57,16 @@ class OceanExportController extends Controller
         $orderBy = $request->input('order_by', 'driver_name'); // Default column to order by
         $orderDirection = $request->input('order_direction', 'asc'); // Default order direction
 
+        if (!isset($email)) {
+            // Handle the case where `email` is not present in the query string
+            return response()->json(['error' => 'Missing email parameter'], 400); // Or redirect, use default value, etc.
+        }
+
         $query = OceanExport::with([
             'driver',
             'containerDetail.jobContainer.job'
         ])->whereHas('driver', function ($query) {
-            $query->where('email', '');
+            $query->where('email', $email);
         });
 
         // Apply ordering
