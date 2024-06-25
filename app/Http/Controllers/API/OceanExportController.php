@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\OceanExportResource;
 use App\Models\TrsTrackingTruck;
 use App\Models\OceanExport;
+use Illuminate\Support\Facades\DB;
 
 class OceanExportController extends Controller
 {
@@ -16,13 +17,7 @@ class OceanExportController extends Controller
      */
     public function index(Request $request)
     {
-        // select dp.driver, dr.driver_name, cdtl.container_number, mcnt.id_job, mjb.do_number,mjb.customer_name,mjb.description AS item_type
-        // from ms_dispatch as dp
-        // LEFT JOIN ms_driver as dr on dp.driver=dr.driver_no
-        // LEFT JOIN ms_container_detail as cdtl on dp.id_container_detail=cdtl.id
-        // LEFT JOIN ms_job_container as mcnt on cdtl.id_job_container=mcnt.id_job_container
-        // LEFT JOIN ms_job as mjb on mcnt.id_job=mjb.id_job
-        // WHERE dr.email=''
+
         $validator = Validator::make($request->all(), [
             'page' => 'required|integer',
             'per_page' => 'required|integer',
@@ -34,18 +29,28 @@ class OceanExportController extends Controller
             ], 400); // Return a 400 Bad Request response for validation errors
         }
 
-        $page = $request->query('page');
-        $per_page = $request->query('per_page');
-        $order_by = $request->query('order_by');
-        $order_direction = $request->query('order_direction');
+            $page = $request->query('page');
+            $email = $request->query('email');
+            $per_page = $request->query('per_page');
+            $order_by = $request->query('order_by');
+            $order_direction = $request->query('order_direction');
 
-        // Apply ordering
-        $query = OceanExport::query();
-        $query->orderBy(isset($order_by) ? $order_by : 'id_job', isset($order_direction) ? $order_direction : 'asc');
-        // Apply pagination
-        $items = $query->paginate((int)$per_page, ['*'], 'page', (int)$page);
-        $response = OceanExportResource::collection($items);
-        return response()->json(['data' => $response, 'page' => $page, 'per_page' => $per_page]);
+            $query = DB::table('job_shipment_status')
+            ->select('job_shipment_status.*', DB::raw('1 as koli'))
+
+
+            // ->leftJoin('ms_driver', 'mdp.driver', '=', 'ms_driver.driver_no')
+            // ->leftJoin('ms_container_detail as mjobcd', 'mdp.id_container_detail', '=', 'mjobcd.id')
+            // ->leftJoin('ms_job_container as mjobc', 'mjobcd.id_job_container', '=', 'mjobc.id_job_container')
+            // ->leftJoin('ms_job', 'mjobc.id_job', '=', 'ms_job.id_job')
+            // ->leftJoin('ms_shipper_consignee as mscon', 'mscon.id_shipper_consignee', '=', 'ms_job.id_shipper')
+            ->where('job_shipment_status.email', '=', $email)
+            // ->groupBy('ms_job.id_job')
+            ->limit(10);
+
+            $results = $query->get();
+
+        return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page], 200);
 
     }
     public function fetchDispatches(Request $request)
@@ -72,14 +77,6 @@ class OceanExportController extends Controller
                 $query->where('email', $email);
             });
         }
-
-        // $query = OceanExport::with([
-        //     'driver',
-        //     'containerDetail.jobContainer.job'
-        // ])->whereHas('driver', function ($query) {
-        //     $query->where('email', $email);
-        //     // use of unassigned variable '$email'
-        // });
 
 
         // Apply ordering

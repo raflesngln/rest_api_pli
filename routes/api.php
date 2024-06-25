@@ -67,7 +67,8 @@ Route::prefix('v1')->group(function () {
         Route::put('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'update']);
         Route::delete('/trs_truck_tracking/{id}', [TrsTrackingTruckController::class, 'destroy']);
 
-        Route::get('/ocean_export', [OceanExportController::class, 'fetchDispatches']);
+        // Route::get('/ocean_export', [OceanExportController::class, 'fetchDispatches']);
+        Route::get('/ocean_export', [OceanExportController::class, 'index']);
         Route::get('/ocean_export/{id}', [OceanExportController::class, 'show']);
         Route::post('/ocean_export', [OceanExportController::class, 'store']);
         Route::put('/ocean_export/{id}', [OceanExportController::class, 'update']);
