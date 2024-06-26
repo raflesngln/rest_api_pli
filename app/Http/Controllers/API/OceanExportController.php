@@ -33,21 +33,21 @@ class OceanExportController extends Controller
             $per_page = $request->query('per_page');
             $order_by = $request->query('order_by');
             $order_direction = $request->query('order_direction');
-            $id_job = $request->query('id_job') ?? '';
+            $search = $request->query('search') ?? '';
             $offset = ($page - 1) * $per_page;
 
             $query = DB::table('job_shipment_status')
             ->select('job_shipment_status.*', DB::raw('1 as koli'))
-            ->where('job_shipment_status.email', '=', $email)
-            ->skip($offset)
-            ->take($per_page);
-            // if ($id_job !== '') {
-            //     $query->where('job_shipment_status.id_job', '=', $id_job);
-            // }
-            // $results = $query->limit(20)->get();
-            $results = $query->get();
+            ->where('job_shipment_status.email', '=', $email);
+            // ->skip($offset)
+            // ->take($per_page);
+            if ($search !== '') {
+                $query->where('job_shipment_status.shipper_name', 'like', "%".$search."");
+            }
+            $results = $query->skip($offset)->take($per_page)->get();
+            // $results = $query->get();
 
-        return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page], 200);
+        return response()->json(['data' => $results, 'page' => $page, 'per_page' =>$per_page], 200);
 
     }
     public function fetchDispatches(Request $request)
