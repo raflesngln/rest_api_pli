@@ -28,26 +28,22 @@ class OceanExportController extends Controller
                 'errors' => $validator->messages(),
             ], 400); // Return a 400 Bad Request response for validation errors
         }
-
             $page = $request->query('page');
             $email = $request->query('email');
             $per_page = $request->query('per_page');
             $order_by = $request->query('order_by');
             $order_direction = $request->query('order_direction');
+            $id_job = $request->query('id_job') ?? '';
 
             $query = DB::table('job_shipment_status')
             ->select('job_shipment_status.*', DB::raw('1 as koli'))
-
-
-            // ->leftJoin('ms_driver', 'mdp.driver', '=', 'ms_driver.driver_no')
-            // ->leftJoin('ms_container_detail as mjobcd', 'mdp.id_container_detail', '=', 'mjobcd.id')
-            // ->leftJoin('ms_job_container as mjobc', 'mjobcd.id_job_container', '=', 'mjobc.id_job_container')
-            // ->leftJoin('ms_job', 'mjobc.id_job', '=', 'ms_job.id_job')
-            // ->leftJoin('ms_shipper_consignee as mscon', 'mscon.id_shipper_consignee', '=', 'ms_job.id_shipper')
             ->where('job_shipment_status.email', '=', $email)
-            // ->groupBy('ms_job.id_job')
-            ->limit(10);
-
+            ->skip($page)
+            ->take($per_page);
+            // if ($id_job !== '') {
+            //     $query->where('job_shipment_status.id_job', '=', $id_job);
+            // }
+            // $results = $query->limit(20)->get();
             $results = $query->get();
 
         return response()->json(['data' => $results, 'page' => $page, 'per_page' => $per_page], 200);
@@ -111,9 +107,18 @@ class OceanExportController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        //
+
+            $query = DB::table('job_shipment_status')
+            ->select('job_shipment_status.*', DB::raw('1 as koli'));
+
+            if ($id !== '') {
+                $query->where('job_shipment_status.id_job', '=', $id);
+            }
+            $results = $query->get();
+
+        return response()->json(['data' => $results,'id_job'=>$id], 200);
     }
 
     /**
