@@ -117,7 +117,7 @@ class OceanExportController extends Controller
             if ($id !== '') {
                 $query->where('job_shipment_status.id_job', '=', $id);
             }
-            $results = $query->get();
+            $results = $query->first();
 
         return response()->json(['data' => $results,'id_job'=>$id], 200);
     }
