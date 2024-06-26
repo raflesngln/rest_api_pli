@@ -28,17 +28,19 @@ class OceanExportController extends Controller
                 'errors' => $validator->messages(),
             ], 400); // Return a 400 Bad Request response for validation errors
         }
-            $page = $request->query('page');
+            $page = $request->query('page',1);
             $email = $request->query('email');
             $per_page = $request->query('per_page');
             $order_by = $request->query('order_by');
             $order_direction = $request->query('order_direction');
             $id_job = $request->query('id_job') ?? '';
+            $offset = ($page - 1) * $per_page;
 
             $query = DB::table('job_shipment_status')
             ->select('job_shipment_status.*', DB::raw('1 as koli'))
             ->where('job_shipment_status.email', '=', $email)
-            ->limit(10);
+            ->skip($offset)
+            ->take($per_page);
             // if ($id_job !== '') {
             //     $query->where('job_shipment_status.id_job', '=', $id_job);
             // }
