@@ -37,7 +37,7 @@ class OceanExportController extends Controller
             $offset = ($page - 1) * $per_page;
 
             $query = DB::table('job_shipment_status')
-            ->select('job_shipment_status.*', DB::raw('1 as koli'))
+            ->select('job_shipment_status.*')
             ->where('job_shipment_status.email', '=', $email);
             // ->skip($offset)
             // ->take($per_page);
@@ -120,6 +120,41 @@ class OceanExportController extends Controller
             $results = $query->first();
 
         return response()->json(['data' => $results,'id_job'=>$id], 200);
+    }
+    public function tracking_status_ocean(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'page' => 'required|integer',
+            'per_page' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], 400); // Return a 400 Bad Request response for validation errors
+        }
+        $id_job = $request->query('id_job','');
+            $page = $request->query('page',1);
+            $email = $request->query('email');
+            $per_page = $request->query('per_page');
+            $order_by = $request->query('order_by');
+            $order_direction = $request->query('order_direction');
+            $search = $request->query('search') ?? '';
+            $offset = ($page - 1) * $per_page;
+
+            $query = DB::table('tr_shipment_status')
+            ->select('*')
+            ->where('id_job', '=', 'P-02202405170005');
+            // ->skip($offset)
+            // ->take($per_page);
+            if ($search !== '') {
+                $query->where('id_tracking', 'like', "%".$search."%");
+            }
+            $results = $query->skip($offset)->take($per_page)->get();
+            // $results = $query->get();
+
+        return response()->json(['data' => $results, 'page' => $page, 'per_page' =>$per_page], 200);
     }
 
     /**

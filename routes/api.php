@@ -70,6 +70,7 @@ Route::prefix('v1')->group(function () {
         // Route::get('/ocean_export', [OceanExportController::class, 'fetchDispatches']);
         Route::get('/ocean_export', [OceanExportController::class, 'index']);
         Route::get('/ocean_export/{id}', [OceanExportController::class, 'show']);
+        Route::get('/tracking_status_ocean', [OceanExportController::class, 'tracking_status_ocean']);
         Route::post('/ocean_export', [OceanExportController::class, 'store']);
         Route::put('/ocean_export/{id}', [OceanExportController::class, 'update']);
         Route::delete('/ocean_export/{id}', [OceanExportController::class, 'destroy']);
