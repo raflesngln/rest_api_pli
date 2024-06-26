@@ -42,7 +42,7 @@ class OceanExportController extends Controller
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {
-                $query->where('job_shipment_status.shipper_name', 'like', "%".$search."");
+                $query->where('job_shipment_status.shipper_name', 'like', "%".$search."%");
             }
             $results = $query->skip($offset)->take($per_page)->get();
             // $results = $query->get();
