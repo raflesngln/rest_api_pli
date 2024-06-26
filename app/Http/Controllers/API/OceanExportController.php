@@ -38,8 +38,7 @@ class OceanExportController extends Controller
             $query = DB::table('job_shipment_status')
             ->select('job_shipment_status.*', DB::raw('1 as koli'))
             ->where('job_shipment_status.email', '=', $email)
-            ->skip($page)
-            ->take($per_page);
+            ->limit(10);
             // if ($id_job !== '') {
             //     $query->where('job_shipment_status.id_job', '=', $id_job);
             // }
