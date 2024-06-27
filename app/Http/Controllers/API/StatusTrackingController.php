@@ -41,10 +41,20 @@ class StatusTrackingController extends Controller
             $search = $request->query('search') ?? '';
             $offset = ($page - 1) * $per_page;
 
-            $query = DB::table('ms_tracking')
-            ->select('*');
+            $jobId = 'P-02202406030000';
 
-            $results = $query->get();
+            $results = DB::table('ms_tracking as a')
+            ->select('b.id_job', 'a.*')
+            ->leftJoin('tr_shipment_status as b', function($join) {
+                $join->on('a.id_tracking', '=', 'b.id_tracking')
+                     ->where('b.id_job', '=', 'P-02202405170005');
+            })
+            ->get();
+
+            // $query = DB::table('ms_tracking')
+            // ->select('*');
+
+            // $results = $query->get();
 
         return response()->json(['data' => $results], 200);
     }
