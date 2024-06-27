@@ -10,6 +10,7 @@ use App\Http\Controllers\API\MsTrackingTruckController;
 use App\Http\Controllers\API\JobsDispacthController;
 use App\Http\Controllers\API\TrsTrackingTruckController;
 use App\Http\Controllers\API\OceanExportController;
+use App\Http\Controllers\API\StatusTrackingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -74,5 +75,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/ocean_export', [OceanExportController::class, 'store']);
         Route::put('/ocean_export/{id}', [OceanExportController::class, 'update']);
         Route::delete('/ocean_export/{id}', [OceanExportController::class, 'destroy']);
+
+
+
+        Route::get('/ms_tracking_status', [StatusTrackingController::class, 'ms_tracking_status']);
     });
 });
