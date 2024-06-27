@@ -32,30 +32,21 @@ class StatusTrackingController extends Controller
     {
 
 
-            $id_job = $request->query('id_job','');
-            $page = $request->query('page',1);
-            $email = $request->query('email');
-            $per_page = $request->query('per_page');
-            $order_by = $request->query('order_by');
-            $order_direction = $request->query('order_direction');
-            $search = $request->query('search') ?? '';
-            $offset = ($page - 1) * $per_page;
+        $search = $request->query('search') ?? '';
 
-            $jobId = 'P-02202406030000';
+        $id_job = $request->query('id_job', '');
 
-            $results = DB::table('ms_tracking as a')
+        $results = DB::table('ms_tracking as a')
             ->select('b.id_job', 'a.*')
-            ->leftJoin('tr_shipment_status as b', function($join) {
-                $join->on('a.id_tracking', '=', 'b.id_tracking')
-                     ->where('b.id_job', '=', 'P-02202405170005');
+            ->leftJoin('tr_shipment_status as b', function($join) use ($id_job) {
+                $join->on('a.id_tracking', '=', 'b.id_tracking');
+
+                // Check if $id_job is not empty, then apply the where condition
+                if ($id_job !== '') {
+                    $join->where('b.id_job', '=', $id_job);
+                }
             })
             ->get();
-
-            // $query = DB::table('ms_tracking')
-            // ->select('*');
-
-            // $results = $query->get();
-
         return response()->json(['data' => $results], 200);
     }
     /**
