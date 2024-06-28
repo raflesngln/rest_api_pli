@@ -119,7 +119,7 @@ class StatusTrackingController extends Controller
         */
 
             // Find the record by id
-            $record = MsJobStatusTracking::find($id);
+            $record =MsJobStatusTracking::where('pid', $id)->first();
 
             // Check if the record exists
             if (!$record) {
@@ -128,8 +128,9 @@ class StatusTrackingController extends Controller
 
             // Validate inputs
             $request->validate([
-                'id_job' => 'required|string',
                 'tracking_name' => 'required|string',
+                'status_name' => 'required|string',
+                'is_active' => 'required|integer',
             ]);
 
             // Update the record with validated inputs
