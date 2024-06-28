@@ -87,9 +87,19 @@ class StatusTrackingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // $file='pli/prisma.png';
+        // $filebase64= json_decode($this->ObsstorageService->getFileBase64($file));
+
+        // Retrieve a single user by ID
+        $resp = MsJobStatusTracking::where('pid', $id)->first();
+
+        if (!$resp) {
+            return response()->json(['message' => 'Driver not found'], 404);
+        }
+
+        return response()->json(['data' => $resp],200);
     }
 
     /**
