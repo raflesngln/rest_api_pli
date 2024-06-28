@@ -29,10 +29,12 @@ class StatusTrackingController extends Controller
         $status_name= $request['status_name'];
         $validator = Validator::make($request->all(), [
             'pid' => 'required|string',
-            'id_job' => 'required|string',
-            'id_tracking' => 'nullable|string', // Assuming it's optional
-            'moda_transport' => 'required|string',
+            'id_tr_shipment_status' => 'required|string',
+            'group_name' => 'nullable|string', // Assuming it's optional
+            'id_tracking' => 'required|string',
             'status_name' => 'required|string',
+            'tracking_name' => 'required|string',
+            'id_job' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -42,10 +44,20 @@ class StatusTrackingController extends Controller
         $driver = MsJobStatusTracking::create([
             'pid' => $request['pid'],
             'id_tr_shipment_status' => $request['id_tr_shipment_status'],
-            'id_group_shipment_status' => $request['id_group_shipment_status'],
-            'id_job' => $request['id_job'],
+            'group_name' => $request['group_name'],
+            'id_tracking' => $request['id_tracking'],
             'tracking_name' => $request['tracking_name'],
-            'moda_transport' => $request['moda_transport'],
+            'tracking_order' => $request['tracking_order'],
+            'tracking_level' => $request['tracking_level'],
+            'id_job' => $request['id_job'],
+            'timestamp_status' => date('Ymd His'),
+            'additional' => 'lorem',
+            'color_status' => 'red',
+            'table_code' => 'TBLSTSTRACK',
+            'created_by' => 'rafles',
+            'created_datetime' => date('Ymd His'),
+            'is_active' => 1,
+            'is_deleted' => 0,
         ]);
 
         $response = [
