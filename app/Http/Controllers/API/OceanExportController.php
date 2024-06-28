@@ -37,7 +37,7 @@ class OceanExportController extends Controller
             $offset = ($page - 1) * $per_page;
 
             $query = DB::table('job_shipment_status')
-            ->select('job_shipment_status.*')
+            ->select('*')
             ->where('job_shipment_status.email', '=', $email);
             // ->skip($offset)
             // ->take($per_page);
@@ -45,9 +45,9 @@ class OceanExportController extends Controller
                 $query->where('job_shipment_status.shipper_name', 'like', "%".$search."%");
             }
             $results = $query->skip($offset)->take($per_page)->get();
-            // $results = $query->get();
+            $resp = $query->get();
 
-        return response()->json(['data' => $results, 'page' => $page, 'per_page' =>$per_page], 200);
+        return response()->json(['data' => $resp, 'page' => $page, 'per_page' =>$per_page], 200);
 
     }
     public function fetchDispatches(Request $request)
