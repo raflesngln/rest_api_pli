@@ -8,18 +8,27 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
-class MStatusTracking extends Model
+class MsTracking extends Model
 {
     use HasFactory,HasApiTokens, HasFactory, Notifiable;
     protected $table = 'ms_tracking';
     protected $fillable = [
-        'pid ',
-        'id_tr_shipment_status',
+        'pid  ',
+        'id_tracking',
         'id_group_shipment_status',
-        'id_job',
-        'tracking_name',
+        'color_status',
+        'status_name',
         'moda_transport',
-        'primary_id',
+        'is_delete',
+        'is_active',
+        'is_publish',
+        'table_code',
+        'status_code',
+        'desc_en',
+        'desc_in',
+        'order',
+        'level',
     ];
-}
 
+
+}

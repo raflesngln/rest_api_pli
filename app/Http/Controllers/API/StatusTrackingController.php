@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\StatusTrackingJob;
 use App\Models\TrsTrackingTruck;
-use App\Models\MStatusTracking;
+use App\Models\MsJobStatusTracking;
 use Illuminate\Support\Facades\DB;
 
 class StatusTrackingController extends Controller
@@ -25,21 +25,21 @@ class StatusTrackingController extends Controller
      */
     public function store(Request $request)
     {
+
+        $status_name= $request['status_name'];
         $validator = Validator::make($request->all(), [
-            'pid' => 'required|string|unique:ms_driver',
-            'id_tr_shipment_status' => 'required|string',
-            'id_group_shipment_status' => 'nullable|string', // Assuming it's optional
-            'id_job' => 'nullable|string', // Assuming it's optional
-            'tracking_name' => 'required|integer',
-            'moda_transport' => 'required|integer',
-            'primary_id' => 'nullable|string', // Assuming it's optional
+            'pid' => 'required|string',
+            'id_job' => 'required|string',
+            'id_tracking' => 'nullable|string', // Assuming it's optional
+            'moda_transport' => 'required|string',
+            'status_name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
 
-        $driver = MStatusTracking::create([
+        $driver = MsJobStatusTracking::create([
             'pid' => $request['pid'],
             'id_tr_shipment_status' => $request['id_tr_shipment_status'],
             'id_group_shipment_status' => $request['id_group_shipment_status'],
@@ -55,6 +55,7 @@ class StatusTrackingController extends Controller
         ];
 
         return response()->json(['data' => $response], 201);
+
     }
 
     public function ms_tracking_status(Request $request)
