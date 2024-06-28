@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\StatusTrackingJob;
+use App\Http\Resources\StatusTrackingJobResource;
 use App\Models\TrsTrackingTruck;
 use App\Models\MsJobStatusTracking;
 use Illuminate\Support\Facades\DB;
@@ -61,7 +61,7 @@ class StatusTrackingController extends Controller
         ]);
 
         $response = [
-            'driver' => new StatusTrackingJob($driver), // Use the resource here
+            'driver' => new StatusTrackingJobResource($driver), // Use the resource here
             'message' => 'Success create data',
         ];
 
