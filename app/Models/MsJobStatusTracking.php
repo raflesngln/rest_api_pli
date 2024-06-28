@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class MsJobStatusTracking extends Model
 {
+    public $timestamps = false;
     use HasFactory,HasApiTokens, HasFactory, Notifiable;
     protected $table = 'tr_shipment_status';
     protected $fillable = [

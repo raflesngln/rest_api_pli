@@ -26,7 +26,7 @@ class StatusTrackingController extends Controller
     public function store(Request $request)
     {
 
-        $status_name= $request['status_name'];
+        // $status_name= $request['status_name'];
         $validator = Validator::make($request->all(), [
             'pid' => 'required|string',
             'id_tr_shipment_status' => 'required|string',
