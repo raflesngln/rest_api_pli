@@ -52,7 +52,7 @@ class StatusTrackingController extends Controller
             'id_job' => $request['id_job'],
             'additional' => 'lorem',
             'color_status' => 'red',
-            'table_code' => 'TBLSTSTRACK',
+            'table_code' => 'TSS01',
             'created_by' => 'rafles',
             'is_active' => 1,
             'is_deleted' => 0,
