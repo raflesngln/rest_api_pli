@@ -46,7 +46,6 @@ class StatusTrackingController extends Controller
             'id_job' => $request['id_job'],
             'tracking_name' => $request['tracking_name'],
             'moda_transport' => $request['moda_transport'],
-            'primary_id' => $request['primary_id'],
         ]);
 
         $response = [
