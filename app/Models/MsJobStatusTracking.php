@@ -13,6 +13,7 @@ class MsJobStatusTracking extends Model
     public $timestamps = false;
     use HasFactory,HasApiTokens, HasFactory, Notifiable;
     protected $table = 'tr_shipment_status';
+    protected $primaryKey = 'pid';
     protected $fillable = [
         'pid',
         'id_tr_shipment_status',

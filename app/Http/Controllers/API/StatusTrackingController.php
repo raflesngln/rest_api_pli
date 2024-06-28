@@ -119,23 +119,23 @@ class StatusTrackingController extends Controller
         */
 
             // Find the record by id
-            $record =MsJobStatusTracking::where('pid', $id)->first();
-
+            $record = MsJobStatusTracking::where('pid', $id)->first();
             // Check if the record exists
             if (!$record) {
                 return response()->json(['message' => 'Record not found'], 404);
             }
-
-            // Validate inputs
-            $request->validate([
-                'tracking_name' => 'required|string',
-                'status_name' => 'required|string',
-                'is_active' => 'required|integer',
-            ]);
-
-            // Update the record with validated inputs
             $record->update($request->all());
             return response()->json(['data'=>$record,'message'=>'success update data'],200);
+
+            // Validate inputs
+            // $request->validate([
+            //     'tracking_name' => 'required|string',
+            //     'status_name' => 'required|string',
+            //     'is_active' => 'required|integer',
+            // ]);
+            // // Update the record with validated inputs
+            // $record->update($request->all());
+            // return response()->json(['data'=>$record,'message'=>'success update data'],200);
     }
 
     /**
