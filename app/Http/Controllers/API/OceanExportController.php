@@ -145,7 +145,8 @@ class OceanExportController extends Controller
 
             $query = DB::table('tr_shipment_status')
             ->select('*')
-            ->where('id_job', '=', $id_job);
+            ->where('id_job', '=', $id_job)
+            ->where('is_deleted', '=', 0);
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {

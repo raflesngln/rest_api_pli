@@ -69,12 +69,8 @@ class StatusTrackingController extends Controller
 
     public function ms_tracking_status(Request $request)
     {
-
-
         $search = $request->query('search') ?? '';
-
         $id_job = $request->query('id_job', '');
-
         $results = DB::table('ms_tracking as a')
             ->select('b.id_job', 'a.*')
             ->leftJoin('tr_shipment_status as b', function($join) use ($id_job) {
@@ -99,9 +95,36 @@ class StatusTrackingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, $id)
     {
-        //
+
+        /*
+            $resp = MsJobStatusTracking::where('pid', $id)->first();
+            if (!$resp) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+            $resp->update($request->all());
+            return response()->json(['data'=>$resp,'message'=>'success update data'],200);
+        */
+
+            // Find the record by id
+            $record = MsJobStatusTracking::find($id);
+
+            // Check if the record exists
+            if (!$record) {
+                return response()->json(['message' => 'Record not found'], 404);
+            }
+
+            // Validate inputs
+            $request->validate([
+                'id_job' => 'required|string',
+                'tracking_name' => 'required|string',
+            ]);
+
+            // Update the record with validated inputs
+            $record->update($request->all());
+            return response()->json(['data'=>$record,'message'=>'success update data'],200);
     }
 
     /**

@@ -79,6 +79,7 @@ Route::prefix('v1')->group(function () {
 
 
         Route::post('/tracking_job', [StatusTrackingController::class, 'store']);
+        Route::put('/tracking_job/{id}', [StatusTrackingController::class, 'update']);
         Route::get('/ms_tracking_job', [StatusTrackingController::class, 'ms_tracking_status']);
     });
 });
