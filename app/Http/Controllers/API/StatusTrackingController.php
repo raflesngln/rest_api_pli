@@ -50,12 +50,10 @@ class StatusTrackingController extends Controller
             'tracking_order' => $request['tracking_order'],
             'tracking_level' => $request['tracking_level'],
             'id_job' => $request['id_job'],
-            'timestamp_status' => date('Ymd His'),
             'additional' => 'lorem',
             'color_status' => 'red',
             'table_code' => 'TBLSTSTRACK',
             'created_by' => 'rafles',
-            'created_datetime' => date('Ymd His'),
             'is_active' => 1,
             'is_deleted' => 0,
         ]);
