@@ -135,7 +135,6 @@ class StatusTrackingController extends Controller
             // ]);
             // // Update the record with validated inputs
             // $record->update($request->all());
-            // return response()->json(['data'=>$record,'message'=>'success update data'],200);
     }
 
     /**
