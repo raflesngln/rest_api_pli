@@ -11,6 +11,7 @@ use App\Http\Controllers\API\JobsDispacthController;
 use App\Http\Controllers\API\TrsTrackingTruckController;
 use App\Http\Controllers\API\OceanExportController;
 use App\Http\Controllers\API\StatusTrackingController;
+use App\Http\Controllers\API\MsFilesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -82,5 +83,12 @@ Route::prefix('v1')->group(function () {
         Route::put('/tracking_job/{id}', [StatusTrackingController::class, 'update']);
         Route::get('/tracking_job/{id}', [StatusTrackingController::class, 'show']);
         Route::get('/ms_tracking_job', [StatusTrackingController::class, 'ms_tracking_status']);
+
+
+        Route::post('/ms_files', [MsFilesController::class, 'store']);
+        Route::get('/ms_files', [MsFilesController::class, 'index']);
+        Route::get('/ms_files/{id}', [MsFilesController::class, 'show']);
+        Route::put('/ms_files/{pid}', [MsFilesController::class, 'update']);
+
     });
 });

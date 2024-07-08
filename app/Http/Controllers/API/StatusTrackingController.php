@@ -41,7 +41,7 @@ class StatusTrackingController extends Controller
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
 
-        $driver = MsJobStatusTracking::create([
+        $data = MsJobStatusTracking::create([
             'pid' => $request['pid'],
             'id_tr_shipment_status' => $request['id_tr_shipment_status'],
             'group_name' => $request['group_name'],
@@ -59,7 +59,7 @@ class StatusTrackingController extends Controller
         ]);
 
         $response = [
-            'driver' => new StatusTrackingJobResource($driver), // Use the resource here
+            'data' => new StatusTrackingJobResource($data), // Use the resource here
             'message' => 'Success create data',
         ];
 
