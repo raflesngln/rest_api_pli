@@ -109,14 +109,8 @@ class StatusTrackingController extends Controller
     public function update(Request $request, $id)
     {
 
-        /*
-            $resp = MsJobStatusTracking::where('pid', $id)->first();
-            if (!$resp) {
-                return response()->json(['message' => 'User not found'], 404);
-            }
-            $resp->update($request->all());
-            return response()->json(['data'=>$resp,'message'=>'success update data'],200);
-        */
+
+
 
             // Find the record by id
             $record = MsJobStatusTracking::where('pid', $id)->first();
