@@ -26,44 +26,70 @@ class StatusTrackingController extends Controller
     public function store(Request $request)
     {
 
-        // $status_name= $request['status_name'];
-        $validator = Validator::make($request->all(), [
-            'pid' => 'required|string',
-            'id_tr_shipment_status' => 'required|string',
-            'group_name' => 'nullable|string', // Assuming it's optional
-            'id_tracking' => 'required|string',
-            'status_name' => 'required|string',
-            'tracking_name' => 'required|string',
-            'id_job' => 'required|string',
-        ]);
+        // select right(pid,3) as nomor_pid,right(id_tr_shipment_status,3) as nomor_pid,
+// pid as nomor_last from tr_shipment_status order by created_datetime,pid desc limit 1
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
-        }
 
-        $data = MsJobStatusTracking::create([
-            'pid' => $request['pid'],
-            'id_tr_shipment_status' => $request['id_tr_shipment_status'],
-            'group_name' => $request['group_name'],
-            'id_tracking' => $request['id_tracking'],
-            'tracking_name' => $request['tracking_name'],
-            'tracking_order' => $request['tracking_order'],
-            'tracking_level' => $request['tracking_level'],
-            'id_job' => $request['id_job'],
-            'additional' => 'lorem',
-            'color_status' => 'red',
-            'table_code' => 'TSS01',
-            'created_by' => 'rafles',
-            'is_active' => 1,
-            'is_deleted' => 0,
-        ]);
+$cek_id = DB::table('tr_shipment_status')
+    ->select(
+        DB::raw('RIGHT(pid, 3) AS nomor_pid'),
+        DB::raw('RIGHT(id_tr_shipment_status, 3) AS nomor_id_shipment'), // This seems like a duplicate selection, you might want to remove one
+        'pid AS nomor_last'
+    )
+    ->orderBy('created_datetime', 'desc')
+    ->orderBy('pid', 'desc')
+    ->limit(1)
+    ->first();
 
-        $response = [
-            'data' => new StatusTrackingJobResource($data), // Use the resource here
-            'message' => 'Success create data',
-        ];
 
-        return response()->json(['data' => $response], 201);
+    $pid_last = str_pad((int)$cek_id->nomor_pid + 1, strlen($cek_id->nomor_pid), '0', STR_PAD_LEFT);
+    $new_pid="TSS01".date('YmdHis').$pid_last;
+    $id_shipment_last = str_pad((int)$cek_id->nomor_id_shipment + 1, strlen($cek_id->nomor_id_shipment), '0', STR_PAD_LEFT);
+    $new_id_shipment="TSS01".date('Ymd').$id_shipment_last;
+
+
+    return response()->json(['id' => $new_pid,'id_pr_shipment_status'=>$new_id_shipment], 200); // Return validation errors as JSON
+
+exit();
+
+        // // $status_name= $request['status_name'];
+        // $validator = Validator::make($request->all(), [
+        //     'pid' => 'required|string',
+        //     'id_tr_shipment_status' => 'required|string',
+        //     'group_name' => 'nullable|string', // Assuming it's optional
+        //     'id_tracking' => 'required|string',
+        //     'status_name' => 'required|string',
+        //     'tracking_name' => 'required|string',
+        //     'id_job' => 'required|string',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
+        // }
+
+        // $data = MsJobStatusTracking::create([
+        //     'pid' => $request['pid'],
+        //     'id_tr_shipment_status' => $request['id_tr_shipment_status'],
+        //     'group_name' => $request['group_name'],
+        //     'id_tracking' => $request['id_tracking'],
+        //     'tracking_name' => $request['tracking_name'],
+        //     'tracking_order' => $request['tracking_order'],
+        //     'tracking_level' => $request['tracking_level'],
+        //     'id_job' => $request['id_job'],
+        //     'additional' => 'lorem',
+        //     'color_status' => 'red',
+        //     'table_code' => 'TSS01',
+        //     'created_by' => 'rafles',
+        //     'is_active' => 1,
+        //     'is_deleted' => 0,
+        // ]);
+
+        // $response = [
+        //     'data' => new StatusTrackingJobResource($data), // Use the resource here
+        //     'message' => 'Success create data',
+        // ];
+
+        // return response()->json(['data' => $response], 201);
 
     }
 

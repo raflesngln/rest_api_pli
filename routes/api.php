@@ -78,7 +78,6 @@ Route::prefix('v1')->group(function () {
         Route::delete('/ocean_export/{id}', [OceanExportController::class, 'destroy']);
 
 
-
         Route::post('/tracking_job', [StatusTrackingController::class, 'store']);
         Route::post('/tracking_job/{id}', [StatusTrackingController::class, 'update']);
         Route::get('/tracking_job/{id}', [StatusTrackingController::class, 'show']);
