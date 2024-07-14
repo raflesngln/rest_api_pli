@@ -46,8 +46,49 @@ class OceanExportController extends Controller
             }
             $results = $query->skip($offset)->take($per_page)->get();
             $resp = $query->get();
+            $arr=[];
+            foreach($resp as $row){
+                $id_job=$row->id_job;
+                $get_status = DB::table('tr_shipment_status')
+                            ->select(
+                                'group_name','tracking_name',
+                                DB::raw('RIGHT(pid, 3) AS nomor_pid'),
+                                DB::raw('RIGHT(id_tr_shipment_status, 3) AS nomor_id_shipment'), // If needed
+                                'pid AS nomor_last'
+                            )
+                            ->where('id_job', $id_job) // Add the where clause
+                            ->orderBy('created_datetime', 'desc')
+                            ->orderBy('pid', 'desc')
+                            ->limit(1)
+                            ->first();
+                $data=array(
+                    'driver'=>$row->driver,
+                    'driver_name'=>$row->driver_name,
+                    'email'=>$row->email,
+                    'container_number'=>$row->container_number,
+                    'id_job'=>$row->id_job,
+                    'do_number'=>$row->do_number,
+                    'item_type'=>$row->item_type,
+                    'pi_table'=>$row->pi_table,
+                    'shipper_name'=>$row->shipper_name,
+                    'address_1'=>$row->address_1,
+                    'address_2'=>$row->address_2,
+                    'iso_country'=>$row->iso_country,
+                    'country_name'=>$row->country_name,
+                    'state_name'=>$row->state_name,
+                    'city_name'=>$row->city_name,
+                    'subdistrict_name'=>$row->subdistrict_name,
+                    'village_name'=>$row->village_name,
+                    'zip_code'=>$row->zip_code,
+                    'scheduled_stuffing'=>$row->scheduled_stuffing,
+                    'last_status'=>$get_status->tracking_name,
+                    'group_name'=>$get_status->group_name,
+                );
+                $arr[]=$data;
+            }
 
-        return response()->json(['data' => $resp, 'page' => $page, 'per_page' =>$per_page], 200);
+        // return response()->json(['data' => $resp, 'page' => $page, 'per_page' =>$per_page], 200);
+        return response()->json(['data' => $arr, 'page' => $page, 'per_page' =>$per_page], 200);
 
     }
     public function fetchDispatches(Request $request)
@@ -112,14 +153,20 @@ class OceanExportController extends Controller
     {
 
             $query = DB::table('job_shipment_status')
-            ->select('job_shipment_status.*', DB::raw('1 as koli'));
+            ->select('job_shipment_status.*');
 
             if ($id !== '') {
                 $query->where('job_shipment_status.id_job', '=', $id);
             }
             $results = $query->first();
+        $pi_table=$results->pi_table;
+        $files_data = DB::table('ms_files')
+        ->select('*')
+        ->where('pi_table', '=', $pi_table)
+        ->where('is_deleted', '=', 0)
+        ->get();
 
-        return response()->json(['data' => $results,'id_job'=>$id], 200);
+        return response()->json(['data' => $results,'id_job'=>$id,'files'=>$files_data], 200);
     }
     public function tracking_status_ocean(Request $request)
     {

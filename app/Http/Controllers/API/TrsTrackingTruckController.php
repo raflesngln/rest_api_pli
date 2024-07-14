@@ -140,7 +140,7 @@ class TrsTrackingTruckController extends Controller
 
         $filename= 'track_'.$id_dispatch.'_'.date('YmdHis');
 
-        // $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
+        $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
         // echo ( $upload->path_file);
         // exit();
 
@@ -162,7 +162,7 @@ class TrsTrackingTruckController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
-        $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file)); // get response upload name path
+        $upload=json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $file)); // get response upload name path
         $row = TrsTrackingTruck::create([
             'id_dispatch' => $request['id_dispatch'],
             'id_tracking' => $request['id_tracking'],

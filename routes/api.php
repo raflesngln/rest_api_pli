@@ -87,6 +87,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/ms_files', [MsFilesController::class, 'store']);
         Route::get('/ms_files', [MsFilesController::class, 'index']);
         Route::get('/ms_files/{id}', [MsFilesController::class, 'show']);
+        Route::get('/ms_files_job/{id}', [MsFilesController::class, 'files_job']);
         Route::put('/ms_files/{pid}', [MsFilesController::class, 'update']);
 
     });
