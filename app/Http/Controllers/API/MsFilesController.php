@@ -79,6 +79,7 @@ class MsFilesController extends Controller
         // return response()->json(['messsage' =>'attachment'], 400); // Return validation errors as JSON
         // exit();
 
+
         $cek_id = DB::table('ms_files')
                 ->select(
                     DB::raw('RIGHT(pid, 3) AS nomor_pid'),
@@ -126,7 +127,7 @@ class MsFilesController extends Controller
             'expired_date'=>$request['expired_date'],
             'dept'=>$request['dept']
         ]);
-        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename);
+        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
         $response = [
             'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'message' => 'Success create data',
@@ -167,8 +168,31 @@ class MsFilesController extends Controller
         if (!$resp) {
             return response()->json(['message' => 'Files not found'], 404);
         }
+        $arrData=[];
+        foreach ($resp as $key => $value) {
+            $attachment=$value->file_name;
+            $pi_table=$value->pi_table;
+            $fileAttachment='pli/tracking_jobs/'.$pi_table.'/'.$attachment;
+            // $attachFIle= ($attachment)?json_decode($this->OBS->getFileBase64($fileAttachment)):'';
+            $filePath='pli/tracking_jobs/'.$pi_table.'/'.$attachment;
+            $fileUrl = Storage::disk('s3')->url($filePath);
 
-        return response()->json(['data' => $resp,'file'=>$file],200);
+
+
+            $items=array(
+                'pid'=>$value->pid,
+                'module'=>$value->modul,
+                'pi_table'=>$value->pi_table,
+                'id_file'=>$value->id_file,
+                'file_name'=>$value->file_name,
+                'attachment'=>'https://mobiles-app.obs.ap-southeast-3.myhuaweicloud.com'.$fileUrl,
+                'subject'=>$value->subject,
+                'description'=>$value->description,
+                'extension'=>$value->extension,
+            );
+            $arrData[]=$items;
+        }
+        return response()->json(['data' => $arrData,'file'=>$file],200);
         // return response()->json(['data' => $resp,'file'=>$filebase64],200);
     }
 

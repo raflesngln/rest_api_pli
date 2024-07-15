@@ -12,7 +12,9 @@ class MsFiles extends Model
     use HasFactory,HasApiTokens, HasFactory, Notifiable;
     public $timestamps = false;
     protected $table = 'ms_files';
-    protected $primaryKey = 'pid';
+    protected $primaryKey = 'pid'; // Your custom primary key
+    public $incrementing = false; // Set to false if your primary key is not an auto-incrementing integer
+    protected $keyType = 'string';
     protected $fillable = [
         'pid',
         'modul',
@@ -44,7 +46,7 @@ class MsFiles extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = ['pid'];
+    // protected $hidden = ['pid'];
 
     /**
      * The attributes that should be cast.
