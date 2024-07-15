@@ -72,6 +72,8 @@ class MsFilesController extends Controller
         // $savePath = 'pli/tracking_jobs/' . $newFileName;
         // $save = Storage::disk('s3')->put($savePath, $fileData);
         $fileData = $request->file('attachment'); // Get the uploaded file from the request
+        $attachment = $request['attachment'];
+        $attachment = base64_decode($attachment);
         $filename = $request['modul'] . '-' . date('YmdHis').'.jpg';
         // $newFileName = 'raflesian.jpg'; // Set the new file name
         $newPath = $request['pi_table']; // Set the new file name
@@ -104,35 +106,36 @@ class MsFilesController extends Controller
             return response()->json(['errors' => $validator->messages()], 400); // Return validation errors as JSON
         }
 
-        $ms_files = MsFiles::create([
-            'pid'=>$new_pid,
-            'modul'=>$request['modul'],
-            'pi_table'=>$request['pi_table'],
-            // 'id_file'=>$id_file,
-            'id_file'=>'FLOOO002',
-            'file_name'=>$filename,
-            'subject'=>$request['subject'],
-            'description'=>$request['description'],
-            'extension'=>$request['extension'],
-            'created_by'=>$request['created_by'],
-            'created_datetime'=>$request['created_datetime'],
-            'created_ip_address'=>$request['created_ip_address'],
-            'created_by_browser'=>$request['created_by_browser'],
-            'modified_by'=>$request['modified_by'],
-            'modified_datetime'=>$request['modified_datetime'],
-            'modified_ip_address'=>$request['modified_ip_address'],
-            'modified_browser'=>$request['modified_browser'],
-            'is_active'=>1,
-            'is_deleted'=>0,
-            'table_code'=>'FL001',
-            'expired_date'=>date('Y-m-d'),
-            'dept'=>$request['dept']
-        ]);
+        // $ms_files = MsFiles::create([
+        //     'pid'=>$new_pid,
+        //     'modul'=>$request['modul'],
+        //     'pi_table'=>$request['pi_table'],
+        //     // 'id_file'=>$id_file,
+        //     'id_file'=>'FLOOO002',
+        //     'file_name'=>$filename,
+        //     'subject'=>$request['subject'],
+        //     'description'=>$request['description'],
+        //     'extension'=>$request['extension'],
+        //     'created_by'=>$request['created_by'],
+        //     'created_datetime'=>$request['created_datetime'],
+        //     'created_ip_address'=>$request['created_ip_address'],
+        //     'created_by_browser'=>$request['created_by_browser'],
+        //     'modified_by'=>$request['modified_by'],
+        //     'modified_datetime'=>$request['modified_datetime'],
+        //     'modified_ip_address'=>$request['modified_ip_address'],
+        //     'modified_browser'=>$request['modified_browser'],
+        //     'is_active'=>1,
+        //     'is_deleted'=>0,
+        //     'table_code'=>'FL001',
+        //     'expired_date'=>date('Y-m-d'),
+        //     'dept'=>$request['dept']
+        // ]);
         $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
         // json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
         $response = [
             'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'message' => 'Success create data',
+            'save'=>$save
         ];
 
         return response()->json(['data'=>$response,'file'=>'upload'], 201);
