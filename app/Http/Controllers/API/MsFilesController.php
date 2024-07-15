@@ -133,7 +133,7 @@ class MsFilesController extends Controller
             'message' => 'Success create data',
         ];
 
-        return response()->json(['data'=>$response,'file'=>$upload], 201);
+        return response()->json(['data'=>$response,'file'=>'upload'], 201);
     }
 
 
