@@ -130,12 +130,13 @@ class MsFilesController extends Controller
             'expired_date'=>date('Y-m-d'),
             'dept'=>$request['dept']
         ]);
-        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
+        // $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
         // json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
         $response = [
+            // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'message' => 'Success create data',
-            'save'=>$save
+            // 'save'=>$save
         ];
 
         return response()->json(['data'=>$response,'file'=>'upload'], 201);
