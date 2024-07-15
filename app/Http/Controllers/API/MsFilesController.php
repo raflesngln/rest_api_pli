@@ -108,7 +108,8 @@ class MsFilesController extends Controller
             'pid'=>$new_pid,
             'modul'=>$request['modul'],
             'pi_table'=>$request['pi_table'],
-            'id_file'=>$id_file,
+            // 'id_file'=>$id_file,
+            'id_file'=>'FLOOO002',
             'file_name'=>$filename,
             'subject'=>$request['subject'],
             'description'=>$request['description'],
@@ -123,8 +124,8 @@ class MsFilesController extends Controller
             'modified_browser'=>$request['modified_browser'],
             'is_active'=>1,
             'is_deleted'=>0,
-            'table_code'=>$request['table_code'],
-            'expired_date'=>$request['expired_date'],
+            'table_code'=>'FL001',
+            'expired_date'=>date('Y-m-d'),
             'dept'=>$request['dept']
         ]);
         $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
