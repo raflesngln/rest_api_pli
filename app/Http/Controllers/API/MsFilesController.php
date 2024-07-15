@@ -121,14 +121,14 @@ class MsFilesController extends Controller
             'modified_datetime'=>$request['modified_datetime'],
             'modified_ip_address'=>$request['modified_ip_address'],
             'modified_browser'=>$request['modified_browser'],
-            'is_active'=>$request['is_active'],
-            'is_deleted'=>$request['is_deleted'],
+            'is_active'=>1,
+            'is_deleted'=>0,
             'table_code'=>$request['table_code'],
             'expired_date'=>$request['expired_date'],
             'dept'=>$request['dept']
         ]);
-        // $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
-        json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
+        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
+        // json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
         $response = [
             'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'message' => 'Success create data',
