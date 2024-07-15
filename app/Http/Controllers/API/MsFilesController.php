@@ -60,28 +60,26 @@ class MsFilesController extends Controller
      */
     public function store(Request $request)
     {
-        // $file = $request->file('attachment');
+        // $fileData = $request->file('attachment');
         // // $file=base64_decode($file);
         // // $fileName = $file->getClientOriginalName();
         // $attachment = $request['attachment'];
         // $attachment = base64_decode($attachment);
-        // $filename= 'track_'.date('YmdHis');
-        // $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
-        // return response()->json(['errors' => $upload], 400); // Return validation errors as JSON
+        // $filename= $request['pi_table'].'-'.date('YmdHis');
+        // // $upload=json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
 
         // $newFileName = 'raflesian.jpg'; // Set the new file name
         // $savePath = 'pli/tracking_jobs/' . $newFileName;
         // $save = Storage::disk('s3')->put($savePath, $fileData);
-
-        // Store the uploaded file in the specified path on S3 with the new file name
-        // return response()->json(['messsage' =>'attachment'], 400); // Return validation errors as JSON
-        // exit();
-
         $fileData = $request->file('attachment'); // Get the uploaded file from the request
         $attachment = $request['attachment'];
         $attachment = base64_decode($attachment);
         $filename = $request['modul'] . '-' . date('YmdHis').'.jpg';
+        // $newFileName = 'raflesian.jpg'; // Set the new file name
         $newPath = $request['pi_table']; // Set the new file name
+        // Store the uploaded file in the specified path on S3 with the new file name
+        // return response()->json(['messsage' =>'attachment'], 400); // Return validation errors as JSON
+        // exit();
 
 
         $cek_id = DB::table('ms_files')
