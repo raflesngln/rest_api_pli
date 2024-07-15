@@ -60,26 +60,28 @@ class MsFilesController extends Controller
      */
     public function store(Request $request)
     {
-        // $fileData = $request->file('attachment');
-        // // $file=base64_decode($file);
-        // // $fileName = $file->getClientOriginalName();
-        // $attachment = $request['attachment'];
-        // $attachment = base64_decode($attachment);
-        // $filename= $request['pi_table'].'-'.date('YmdHis');
-        // // $upload=json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
+        $file = $request->file('attachment');
+        // $file=base64_decode($file);
+        // $fileName = $file->getClientOriginalName();
+        $attachment = $request['attachment'];
+        $attachment = base64_decode($attachment);
+        $filename= 'track_'.date('YmdHis');
+        $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
+        return response()->json(['errors' => $upload], 400); // Return validation errors as JSON
 
         // $newFileName = 'raflesian.jpg'; // Set the new file name
         // $savePath = 'pli/tracking_jobs/' . $newFileName;
         // $save = Storage::disk('s3')->put($savePath, $fileData);
+
+        // Store the uploaded file in the specified path on S3 with the new file name
+        // return response()->json(['messsage' =>'attachment'], 400); // Return validation errors as JSON
+        exit();
+
         $fileData = $request->file('attachment'); // Get the uploaded file from the request
         $attachment = $request['attachment'];
         $attachment = base64_decode($attachment);
         $filename = $request['modul'] . '-' . date('YmdHis').'.jpg';
-        // $newFileName = 'raflesian.jpg'; // Set the new file name
         $newPath = $request['pi_table']; // Set the new file name
-        // Store the uploaded file in the specified path on S3 with the new file name
-        // return response()->json(['messsage' =>'attachment'], 400); // Return validation errors as JSON
-        // exit();
 
 
         $cek_id = DB::table('ms_files')
@@ -130,15 +132,15 @@ class MsFilesController extends Controller
         //     'expired_date'=>date('Y-m-d'),
         //     'dept'=>$request['dept']
         // ]);
-        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
+        // $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
         // json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
-        $response = [
-            'ms_files' => new MsFilesResource($ms_files), // Use the resource here
-            'message' => 'Success create data',
-            'save'=>$save
-        ];
+        // $response = [
+        //     'ms_files' => new MsFilesResource($ms_files), // Use the resource here
+        //     'message' => 'Success create data',
+        //     'save'=>$save
+        // ];
 
-        return response()->json(['data'=>$response,'file'=>'upload'], 201);
+        // return response()->json(['data'=>$response,'file'=>'upload'], 201);
     }
 
 
