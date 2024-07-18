@@ -72,6 +72,28 @@ class MsFilesController extends Controller
         // $savePath = 'pli/tracking_jobs/' . $newFileName;
         // $save = Storage::disk('s3')->put($savePath, $fileData);
 
+        
+        $fileData = $request->file('attachment'); // Get the uploaded file from the request
+        $attachment = $request['attachment'];
+        $attachment = base64_decode($attachment);
+        $filename = $request['modul'] . '-' . date('YmdHis').'.jpg';
+        // $newFileName = 'raflesian.jpg'; // Set the new file name
+        $newPath = $request['pi_table']; // Set the new file name
+
+        
+
+        /*
+        $file = $request->file('attachment');
+        // $file=base64_decode($file);
+        // $fileName = $file->getClientOriginalName();
+        $attachment = $request['attachment'];
+        $attachment = base64_decode($attachment);
+
+        $filename= 'track_'.$id_dispatch.'_'.date('YmdHis');
+
+        $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
+        */
+
 
 
         $cek_id = DB::table('ms_files')
@@ -103,7 +125,7 @@ class MsFilesController extends Controller
             'pi_table'=>$request['pi_table'],
             // 'id_file'=>$id_file,
             'id_file'=>'FLOOO002',
-            'file_name'=>'ASAL AJAAAA',
+            'file_name'=>$filename,
             'subject'=>$request['subject'],
             'description'=>$request['description'],
             'extension'=>$request['extension'],
@@ -121,7 +143,7 @@ class MsFilesController extends Controller
             'expired_date'=>date('Y-m-d'),
             'dept'=>$request['dept']
         ]);
-        // $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
+        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
         // json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
         $response = [
             // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
