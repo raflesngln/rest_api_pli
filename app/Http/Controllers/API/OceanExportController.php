@@ -195,7 +195,7 @@ class OceanExportController extends Controller
             ->select('*')
             ->where('id_job', '=', $id_job)
             ->where('is_deleted', '=', 0)
-            ->orderBy('creadted_datetime', 'desc');
+            ->orderBy('created_datetime', 'desc');
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {
