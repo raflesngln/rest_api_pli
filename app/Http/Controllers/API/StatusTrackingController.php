@@ -74,6 +74,7 @@ class StatusTrackingController extends Controller
             'status_name'=>$request['status_name'],
             'icon_name'=>$request['icon_name'],
             'created_by'=>$request['created_by'],
+            'created_datetime'=>date('Y-m-d H:i:s'),
             'modified_by'=>$request['modified_by'],
             'status_code'=>$request['status_code'],
             'is_publish'=>$request['is_publish'],

@@ -78,6 +78,7 @@ class OceanExportController extends Controller
                     'state_name'=>$row->state_name,
                     'city_name'=>$row->city_name,
                     'subdistrict_name'=>$row->subdistrict_name,
+                    'created_datetime'=>date('Y-m-d H:i:s'),
                     'village_name'=>$row->village_name,
                     'zip_code'=>$row->zip_code,
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
