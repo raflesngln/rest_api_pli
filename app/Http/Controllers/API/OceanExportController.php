@@ -82,7 +82,7 @@ class OceanExportController extends Controller
                     'village_name'=>$row->village_name,
                     'zip_code'=>$row->zip_code,
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
-                    'last_status'=>$get_status?$get_status->tracking_name:'No tracking',
+                    'last_status'=>$get_status?$get_status->tracking_name:'Job Baru',
                     'group_name'=>$get_status?$get_status->group_name:'',
                 );
                 $arr[]=$data;
@@ -195,7 +195,7 @@ class OceanExportController extends Controller
             ->select('*')
             ->where('id_job', '=', $id_job)
             ->where('is_deleted', '=', 0)
-            ->orderBy('name', 'desc');
+            ->orderBy('creadted_datetime', 'desc');
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {
