@@ -82,7 +82,7 @@ class OceanExportController extends Controller
                     'village_name'=>$row->village_name,
                     'zip_code'=>$row->zip_code,
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
-                    'last_status'=>$get_status->tracking_name,
+                    'last_status'=>$get_status?$get_status->tracking_name:'No tracking',
                     'group_name'=>$get_status->group_name,
                 );
                 $arr[]=$data;
@@ -194,7 +194,8 @@ class OceanExportController extends Controller
             $query = DB::table('tr_shipment_status')
             ->select('*')
             ->where('id_job', '=', $id_job)
-            ->where('is_deleted', '=', 0);
+            ->where('is_deleted', '=', 0)
+            ->orderBy('name', 'desc');
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {
