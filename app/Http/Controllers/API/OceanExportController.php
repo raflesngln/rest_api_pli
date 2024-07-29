@@ -83,7 +83,7 @@ class OceanExportController extends Controller
                     'zip_code'=>$row->zip_code,
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
                     'last_status'=>$get_status?$get_status->tracking_name:'No tracking',
-                    'group_name'=>$get_status->group_name,
+                    'group_name'=>$get_status?$get_status->group_name:'',
                 );
                 $arr[]=$data;
             }
