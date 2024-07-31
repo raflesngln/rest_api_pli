@@ -110,7 +110,7 @@ class StatusTrackingController extends Controller
                 // Check if $id_job is not empty, then apply the where condition
                 if ($id_job !== '') {
                     $join->where('b.id_job', '=', $id_job);
-                    $join->where('b.is_active', '=', $id_job);
+                    $join->where('b.is_active', '=', 1);
                 }
             })
             ->get();
