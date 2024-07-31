@@ -202,7 +202,7 @@ class OceanExportController extends Controller
                 ->leftJoin('tr_shipment_status as b', function ($join) {
                     $join->on('a.id_tracking', '=', 'b.id_tracking')
                         ->where('b.id_job', '=', $id_job)
-                        ->where('b.is_active', '=', 1);
+                        ->where('b.is_active', '=', 1)
                         ->where('b.is_deleted', '=', 0);
                 })
                 ->select('b.pid', 'a.status_name', 'b.additional', 'b.color_status', 'b.is_active')
