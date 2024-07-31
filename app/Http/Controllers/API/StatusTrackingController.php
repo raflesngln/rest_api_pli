@@ -103,13 +103,14 @@ class StatusTrackingController extends Controller
         $search = $request->query('search') ?? '';
         $id_job = $request->query('id_job', '');
         $results = DB::table('ms_tracking as a')
-            ->select('b.pid as pid_status','b.id_job','b.is_active as status_active_tracking', 'a.*')
+            ->select('b.is_active as is_active_status','b.pid as pid_status','b.id_job','b.is_active as status_active_tracking', 'a.*')
             ->leftJoin('tr_shipment_status as b', function($join) use ($id_job) {
                 $join->on('a.id_tracking', '=', 'b.id_tracking');
 
                 // Check if $id_job is not empty, then apply the where condition
                 if ($id_job !== '') {
                     $join->where('b.id_job', '=', $id_job);
+                    $join->where('b.is_active', '=', $id_job);
                 }
             })
             ->get();

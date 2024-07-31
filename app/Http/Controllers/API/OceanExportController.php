@@ -191,11 +191,24 @@ class OceanExportController extends Controller
             $search = $request->query('search') ?? '';
             $offset = ($page - 1) * $per_page;
 
-            $query = DB::table('tr_shipment_status')
-            ->select('*')
-            ->where('id_job', '=', $id_job)
-            ->where('is_deleted', '=', 0)
-            ->orderBy('created_datetime', 'desc');
+            // $query = DB::table('tr_shipment_status')
+            // ->select('*')
+            // ->where('id_job', '=', $id_job)
+            // ->where('is_deleted', '=', 0)
+            // ->orderBy('created_datetime', 'desc');
+
+
+            $query = DB::table('ms_tracking as a')
+                ->leftJoin('tr_shipment_status as b', function ($join) {
+                    $join->on('a.id_tracking', '=', 'b.id_tracking')
+                        ->where('b.id_job', '=', $id_job)
+                        ->where('b.is_active', '=', 1);
+                        ->where('b.is_deleted', '=', 0);
+                })
+                ->select('b.pid', 'a.status_name', 'b.additional', 'b.color_status', 'b.is_active')
+                ->orderBy('created_datetime', 'desc')
+                ->get();
+
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {
