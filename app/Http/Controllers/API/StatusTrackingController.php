@@ -103,7 +103,7 @@ class StatusTrackingController extends Controller
         $search = $request->query('search') ?? '';
         $id_job = $request->query('id_job', '');
         $results = DB::table('ms_tracking as a')
-            ->select('b.id_job','b.is_active as status_active_tracking', 'a.*')
+            ->select('b.pid as pid_status, b.id_job','b.is_active as status_active_tracking', 'a.*')
             ->leftJoin('tr_shipment_status as b', function($join) use ($id_job) {
                 $join->on('a.id_tracking', '=', 'b.id_tracking');
 
