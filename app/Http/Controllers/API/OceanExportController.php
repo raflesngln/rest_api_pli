@@ -59,6 +59,7 @@ class OceanExportController extends Controller
                             ->where('id_job', $id_job) // Add the where clause
                             ->orderBy('created_datetime', 'desc')
                             ->orderBy('pid', 'desc')
+                            ->orderBy('is_deleted', 0)
                             ->limit(1)
                             ->first();
                 $data=array(
