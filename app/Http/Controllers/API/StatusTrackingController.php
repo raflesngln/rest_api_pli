@@ -103,7 +103,8 @@ class StatusTrackingController extends Controller
         $search = $request->query('search') ?? '';
         $id_job = $request->query('id_job', '');
         $results = DB::table('ms_tracking as a')
-            ->select('b.is_active as is_active_status','b.pid as pid_status','b.id_job','b.is_active as status_active_tracking', 'a.*')
+            ->select('b.is_active as is_active_status','b.pid as pid_status','b.id_job','b.is_active as status_active_tracking','msgrp.group_name', 'a.*')
+            ->leftJoin('ms_group_shipment_status as msgrp', 'a.id_group_shipment_status', '=', 'msgrp.id_group_shipment_status')
             ->leftJoin('tr_shipment_status as b', function($join) use ($id_job) {
                 $join->on('a.id_tracking', '=', 'b.id_tracking');
 
@@ -111,8 +112,12 @@ class StatusTrackingController extends Controller
                 if ($id_job !== '') {
                     $join->where('b.id_job', '=', $id_job);
                     $join->where('b.is_active', '=', 1);
+                   
                 }
             })
+            ->where('msgrp.group_name', '=', 'OPS')
+            ->where('a.moda_transport', '=', 'OE')
+            ->where('a.is_publish', '=', 1)
             ->get();
         return response()->json(['data' => $results], 200);
     }
