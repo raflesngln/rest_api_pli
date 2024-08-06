@@ -29,6 +29,7 @@ class OceanExportController extends Controller
             ], 400); // Return a 400 Bad Request response for validation errors
         }
             $page = $request->query('page',1);
+            $head_driver = $request->query('head_driver',0);
             $email = $request->query('email');
             $per_page = $request->query('per_page');
             $order_by = $request->query('order_by');
