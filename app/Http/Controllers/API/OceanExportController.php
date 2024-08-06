@@ -38,12 +38,15 @@ class OceanExportController extends Controller
             $offset = ($page - 1) * $per_page;
 
             $query = DB::table('job_shipment_status')
-            ->select('*')
-            ->where('job_shipment_status.email', '=', $email);
+            ->select('*');
+            // ->where('job_shipment_status.email', '=', $email);
             // ->skip($offset)
             // ->take($per_page);
             if ($search !== '') {
                 $query->where('job_shipment_status.shipper_name', 'like', "%".$search."%");
+            }
+            if ($head_driver == '0') {
+                $query->where('job_shipment_status.email', '=', $email);
             }
             $results = $query->skip($offset)->take($per_page)->get();
             $resp = $query->get();
