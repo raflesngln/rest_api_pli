@@ -140,7 +140,8 @@ class TrsTrackingTruckController extends Controller
 
         $filename= 'track_'.$id_dispatch.'_'.date('YmdHis');
 
-        $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
+        // $upload=json_decode($this->OBS->uploadFile('pli/tracking/'.$filename, $file));
+        $upload=json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $file));
         // echo ( $upload->path_file);
         // exit();
 
