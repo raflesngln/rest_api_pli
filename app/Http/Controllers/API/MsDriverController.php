@@ -65,7 +65,8 @@ class MsDriverController extends Controller
 */
     public function show($id)
     {
-        $file='pli/prisma.png';
+        // $file='pli/prisma.png';
+        $file='tracking-mobile/prisma.png';
         $filebase64= json_decode($this->ObsstorageService->getFileBase64($file));
 
 

@@ -146,9 +146,6 @@ class StatusTrackingController extends Controller
     public function update(Request $request, $id)
     {
 
-
-
-
             // Find the record by id
             $record = MsJobStatusTracking::where('pid', $id)->first();
             // Check if the record exists

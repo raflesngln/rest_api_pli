@@ -66,10 +66,10 @@ class MsFilesController extends Controller
         // $attachment = $request['attachment'];
         // $attachment = base64_decode($attachment);
         // $filename= $request['pi_table'].'-'.date('YmdHis');
-        // // $upload=json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
+        // // $upload=json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $fileData)); // get response upload name path
 
         // $newFileName = 'raflesian.jpg'; // Set the new file name
-        // $savePath = 'pli/tracking_jobs/' . $newFileName;
+        // $savePath = 'tracking-mobile/ocean/' . $newFileName;
         // $save = Storage::disk('s3')->put($savePath, $fileData);
 
         
@@ -143,8 +143,8 @@ class MsFilesController extends Controller
             'expired_date'=>date('Y-m-d'),
             'dept'=>$request['dept']
         ]);
-        $save = Storage::disk('s3')->putFileAs('pli/tracking_jobs/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
-        // json_decode($this->OBS->uploadFile('pli/tracking_jobs/'.$filename, $fileData)); // get response upload name path
+        $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
+        // json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $fileData)); // get response upload name path
         $response = [
             // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'ms_files' => new MsFilesResource($ms_files), // Use the resource here
@@ -191,9 +191,10 @@ class MsFilesController extends Controller
         foreach ($resp as $key => $value) {
             $attachment=$value->file_name;
             $pi_table=$value->pi_table;
-            $fileAttachment='pli/tracking_jobs/'.$pi_table.'/'.$attachment;
+            // $fileAttachment='pli/tracking_jobs/'.$pi_table.'/'.$attachment;
+            $fileAttachment='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             // $attachFIle= ($attachment)?json_decode($this->OBS->getFileBase64($fileAttachment)):'';
-            $filePath='pli/tracking_jobs/'.$pi_table.'/'.$attachment;
+            $filePath='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             $fileUrl = Storage::disk('s3')->url($filePath);
 
 
@@ -204,7 +205,8 @@ class MsFilesController extends Controller
                 'pi_table'=>$value->pi_table,
                 'id_file'=>$value->id_file,
                 'file_name'=>$value->file_name,
-                'attachment'=>'https://mobiles-app.obs.ap-southeast-3.myhuaweicloud.com'.$fileUrl,
+                // 'attachment'=>'https://mobiles-app.obs.ap-southeast-3.myhuaweicloud.com'.$fileUrl,
+                'attachment'=>'https://obs-transys-pli.obs.myhuaweicloud.com'.$fileUrl,
                 'subject'=>$value->subject,
                 'description'=>$value->description,
                 'extension'=>$value->extension,
