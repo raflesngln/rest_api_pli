@@ -196,9 +196,6 @@ class MsFilesController extends Controller
             // $attachFIle= ($attachment)?json_decode($this->OBS->getFileBase64($fileAttachment)):'';
             $filePath='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             $fileUrl = Storage::disk('s3')->url($filePath);
-
-
-
             $items=array(
                 'pid'=>$value->pid,
                 'module'=>$value->modul,
