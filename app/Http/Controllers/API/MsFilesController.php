@@ -149,7 +149,7 @@ class MsFilesController extends Controller
             // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'ms_files' => new MsFilesResource($ms_files), // Use the resource here
             'message' => 'Success create data',
-            // 'save'=>$save
+            'status'=>$save
         ];
 
         return response()->json(['data'=>$response,'file'=>'upload'], 201);
