@@ -9,6 +9,7 @@ use App\Http\Resources\OceanExportResource;
 use App\Models\TrsTrackingTruck;
 use App\Models\OceanExport;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class OceanExportController extends Controller
 {
@@ -73,6 +74,7 @@ class OceanExportController extends Controller
                     'container_number'=>$row->container_number,
                     'id_job'=>$row->id_job,
                     'do_number'=>$row->do_number,
+                    'pickup_loc'=>$row->pickup_loc,
                     'item_type'=>$row->item_type,
                     'pi_table'=>$row->pi_table,
                     'shipper_name'=>$row->shipper_name,
@@ -165,14 +167,66 @@ class OceanExportController extends Controller
                 $query->where('job_shipment_status.id_job', '=', $id);
             }
             $results = $query->first();
-        $pi_table=$results->pi_table;
-        $files_data = DB::table('ms_files')
-        ->select('*')
-        ->where('pi_table', '=', $pi_table)
-        ->where('is_deleted', '=', 0)
-        ->get();
+            $pi_table=$results->pi_table;
+            $files_data = DB::table('ms_files')
+            ->select('*')
+            ->where('pi_table', '=', $pi_table)
+            ->where('is_deleted', '=', 0)
+            ->get();
 
         return response()->json(['data' => $results,'id_job'=>$id,'files'=>$files_data], 200);
+    }
+    public function show_test(Request $request, string $id)
+    {
+        $myfile='tracking-mobile/ocean/TSS0220240626000000001/file_135911318646.png';
+        // $getfile = Storage::disk('s3')->get($myfile);
+        // $mimeType = Storage::disk('s3')->mimeType($myfile);
+        // $base64 = base64_encode($getfile);
+        // return json_encode(['base64'=>'data:'.$mimeType.';base64,'.$base64,'type'=>'JPG']);
+        // exit();
+        // $mimeToExtension = [
+        //     'image/jpeg' => 'jpg',
+        //     'image/png' => 'png',
+        //     'application/pdf' => 'pdf',
+        //  ];
+        //  $extension = $mimeToExtension[$mimeType] ?? 'unknown';
+
+        // exit();
+
+        // $attachFIle= ($attachment)?json_decode($this->OBS->getFileBase64($fileAttachment)):'';
+    
+        // return response()->json(['data' => $attachFIle,200);
+
+        // $attachment="file_135911318646.png";
+        // $pi_table="TSS0220240626000000001";
+    
+        // $fileUrl = Storage::disk('s3')->url('tracking-mobile/ocean/'.$pi_table.'/'.$attachment);
+
+
+        // return response()->json(['data' => $fileUrl], 200);
+        // // return response()->json(['data' => $fileUrl], 200);
+        try {
+            $fileName = "file_142425207366.png";
+            $pi_table = "TSS0220240520000000001";
+            $contents = Storage::disk('obs')->get("tracking-mobile/ocean/TSS0220240626000000001/file_135911318646.png");
+        
+            // Generate the file URL
+            // $fileUrl = Storage::disk('s3')->url('tracking-mobile/ocean/'.$pi_table.'/'.$fileName);
+            // $temporaryUrl = Storage::disk('s3')->get(
+            //     'tracking-mobile/ocean/TSS0220240626000000001/' . $fileName, now()->addMinutes(5)
+            // );
+
+            print_r('contents');
+
+            // echo $temporaryUrl;
+            // echo '<img src="'.$temporaryUrl.'" alt="Image" />';
+        
+            // Return the file URL in the JSON response
+            // return response()->json(['data' => $fileUrl], 200);
+        } catch (\Exception $e) {
+            // Handle any errors that might occur
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
     public function tracking_status_ocean(Request $request)
     {

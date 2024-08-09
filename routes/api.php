@@ -76,7 +76,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/ocean_export', [OceanExportController::class, 'store']);
         Route::put('/ocean_export/{id}', [OceanExportController::class, 'update']);
         Route::delete('/ocean_export/{id}', [OceanExportController::class, 'destroy']);
-
+        
+        Route::get('/get_ocean_export/{id}', [OceanExportController::class, 'show_test']);
 
         Route::post('/tracking_job', [StatusTrackingController::class, 'store']);
         Route::post('/tracking_job/{id}', [StatusTrackingController::class, 'update']);

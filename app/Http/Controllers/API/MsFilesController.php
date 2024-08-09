@@ -143,7 +143,31 @@ class MsFilesController extends Controller
             'expired_date'=>date('Y-m-d'),
             'dept'=>$request['dept']
         ]);
-        $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
+        $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'private']);
+
+        $status_upload="";
+        // // Get the S3 client from the Laravel storage disk
+        // $s3Client = Storage::disk('s3')->getDriver()->getAdapter()->getClient();
+        // // Define the bucket name and file path
+        // $bucket = 'transys-dev';
+        // $key = 'tracking-mobile/ocean/' . $newPath . '/' . $filename;
+        // // Upload the file with server-side encryption
+        // $result = $s3Client->putObject([
+        //     'Bucket' => $bucket,
+        //     'Key' => $key,
+        //     'SourceFile' => $fileData->getPathname(),
+        //     'ACL' => 'private',
+        //     'ServerSideEncryption' => 'aws:kms'
+        // ]);
+        // // Check the result if needed
+        // if ($result) {
+        //     // File uploaded successfully
+        //     $status_upload="Skses";
+        // } else {
+        //     // Handle the error
+        //     $status_upload="ERROR";
+        // }
+        // $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
         // json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $fileData)); // get response upload name path
         $response = [
             // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
@@ -152,7 +176,7 @@ class MsFilesController extends Controller
             'status_upload_files'=>$save
         ];
 
-        return response()->json(['data'=>$response,'file'=>'upload'], 201);
+        return response()->json(['data'=>$response,'file'=>'upload','status_upload'=>$status_upload], 201);
     }
 
 

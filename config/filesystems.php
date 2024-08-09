@@ -55,6 +55,10 @@ return [
             'endpoint' => env('HUAWEI_OBS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+            'options' => [
+            'ServerSideEncryption' => 'AES256',
+            // 'ServerSideEncryption' => 'aws:kms',
+            ],
         ],
         'huaweiobs' => [
             'driver' => 'obs',

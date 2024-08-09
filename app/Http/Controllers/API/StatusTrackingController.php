@@ -79,6 +79,7 @@ class StatusTrackingController extends Controller
             'status_code'=>$request['status_code'],
             'is_publish'=>$request['is_publish'],
             'additional'=>$request['additional'],
+            'created_by_browser'=>"mobile",
             'bc20'=>$request['bc20'],
             'bc23'=>$request['bc23'],
             'rh'=>$request['rh'],
