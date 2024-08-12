@@ -273,9 +273,11 @@ class MsFilesController extends Controller
         foreach ($resp as $key => $value) {
             $attachment=$value->file_name;
             $pi_table=$value->pi_table;
-            // $fileAttachment='pli/tracking_jobs/'.$pi_table.'/'.$attachment;
             $fileAttachment='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
-            // $attachFIle= ($attachment)?json_decode($this->OBS->getFileBase64($fileAttachment)):'';
+            $temporaryUrl = Storage::disk('s3')->temporaryUrl(
+                'tracking-mobile/ocean/' . $pi_table . '/' . $fileName, 
+                now()->addMinutes(5)
+            );
             $filePath='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             $fileUrl = Storage::disk('s3')->url($filePath);
             $items=array(
@@ -284,8 +286,8 @@ class MsFilesController extends Controller
                 'pi_table'=>$value->pi_table,
                 'id_file'=>$value->id_file,
                 'file_name'=>$value->file_name,
-                // 'attachment'=>'https://mobiles-app.obs.ap-southeast-3.myhuaweicloud.com'.$fileUrl,
-                'attachment'=>'https://obs-transys-pli.obs.myhuaweicloud.com'.$fileUrl,
+                // 'attachment'=>'https://obs-transys-pli.obs.myhuaweicloud.com'.$fileUrl,
+                'attachment'=>$temporaryUrl,
                 'subject'=>$value->subject,
                 'description'=>$value->description,
                 'extension'=>$value->extension,
