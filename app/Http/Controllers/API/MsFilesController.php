@@ -259,10 +259,7 @@ class MsFilesController extends Controller
     }
     public function files_job($pi_table)
     {
-        $file='pli/prisma.png';
-        // $filebase64= json_decode($this->ObsstorageService->getFileBase64($file));
-
-
+        // $file='pli/prisma.png';
         // Retrieve a single user by ID
         $resp = MsFiles::where('pi_table', $pi_table)->get();
 
@@ -273,11 +270,11 @@ class MsFilesController extends Controller
         foreach ($resp as $key => $value) {
             $fileName=$value->file_name;
             $pi_table=$value->pi_table;
-            // $fileAttachment='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             $temporaryUrl = Storage::disk('s3')->temporaryUrl(
                 'tracking-mobile/ocean/' . $pi_table . '/' . $fileName, 
                 now()->addMinutes(5)
             );
+            // $fileAttachment='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             // $filePath='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             // $fileUrl = Storage::disk('s3')->url($filePath);
             $items=array(
@@ -294,7 +291,7 @@ class MsFilesController extends Controller
             );
             $arrData[]=$items;
         }
-        return response()->json(['data' => $arrData,'file'=>$file],200);
+        return response()->json(['data' => $arrData],200);
         // return response()->json(['data' => $resp,'file'=>$filebase64],200);
     }
 
