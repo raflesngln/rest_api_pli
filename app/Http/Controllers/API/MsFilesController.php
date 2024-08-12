@@ -271,15 +271,15 @@ class MsFilesController extends Controller
         }
         $arrData=[];
         foreach ($resp as $key => $value) {
-            $attachment=$value->file_name;
+            $fileName=$value->file_name;
             $pi_table=$value->pi_table;
-            $fileAttachment='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
+            // $fileAttachment='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
             $temporaryUrl = Storage::disk('s3')->temporaryUrl(
                 'tracking-mobile/ocean/' . $pi_table . '/' . $fileName, 
                 now()->addMinutes(5)
             );
-            $filePath='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
-            $fileUrl = Storage::disk('s3')->url($filePath);
+            // $filePath='tracking-mobile/ocean/'.$pi_table.'/'.$attachment;
+            // $fileUrl = Storage::disk('s3')->url($filePath);
             $items=array(
                 'pid'=>$value->pid,
                 'module'=>$value->modul,
