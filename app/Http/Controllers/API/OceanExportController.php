@@ -169,12 +169,37 @@ class OceanExportController extends Controller
             $results = $query->first();
             $pi_table=$results->pi_table;
             $files_data = DB::table('ms_files')
-            ->select('*')
-            ->where('pi_table', '=', $pi_table)
-            ->where('is_deleted', '=', 0)
-            ->get();
+                        ->select('*')
+                        ->where('pi_table', '=', $pi_table)
+                        ->where('is_deleted', '=', 0)
+                        ->get();
+            $data_files=[];
+            foreach($files_data as $row){
+                $fileName=$row->file_name;
+                // $pi_table=$row->pi_table;
+                $temporaryUrl = Storage::disk('s3')->temporaryUrl(
+                    'tracking-mobile/ocean/' . $pi_table . '/' . $fileName, 
+                    now()->addMinutes(5)
+                );
 
-        return response()->json(['data' => $results,'id_job'=>$id,'files'=>$files_data], 200);
+                $list=array(
+                    'pid'=>$row->pid,
+                    'pi_table'=>$row->pi_table,
+                    'id_file'=>$row->id_file,
+                    'file_name'=>$row->file_name,
+                    'attachment'=>$temporaryUrl,
+                    'modul'=>$row->modul,
+                    'subject'=>$row->subject,
+                    'created_by'=>$row->created_by,
+                    'created_datetime'=>$row->created_datetime,
+                    'is_active'=>$row->is_active,
+                    'description'=>$row->description
+                );
+                $data_files[]=$list;
+
+            }
+
+        return response()->json(['data' => $results,'id_job'=>$id,'files'=>$data_files], 200);
     }
     public function show_test(Request $request, string $id)
     {

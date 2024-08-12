@@ -90,6 +90,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/ms_files/{id}', [MsFilesController::class, 'show']);
         Route::get('/ms_files_job/{id}', [MsFilesController::class, 'files_job']);
         Route::put('/ms_files/{pid}', [MsFilesController::class, 'update']);
+        
+        Route::post('/test_upload_file', [MsFilesController::class, 'test_upload_file']);
+        Route::get('/test_view_file_obs', [MsFilesController::class, 'test_view_file_obs']);
 
     });
 });
