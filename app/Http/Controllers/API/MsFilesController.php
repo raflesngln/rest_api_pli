@@ -143,8 +143,8 @@ class MsFilesController extends Controller
                 'table_code'=>'FL001',
                 'expired_date'=>date('Y-m-d'),
                 'dept'=>'APALO',//$request['dept'],
-                'latitude'=>'latitudes',
-                'longitude'=>'longitude'
+                'file_latitude'=>'latitudes',
+                'file_longitude'=>'longitude'
                 // 'latitude'=>$request['latitude'],
                 // 'longitude'=>$request['longitude']
             ]);
