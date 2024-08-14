@@ -37,6 +37,8 @@ class MsFiles extends Model
         'table_code',
         'expired_date',
         'dept',
+        'file_latitude',
+        'file_longitude',
     ];
 
 
