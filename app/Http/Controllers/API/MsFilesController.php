@@ -142,7 +142,7 @@ class MsFilesController extends Controller
                 'is_deleted'=>0,
                 'table_code'=>'FL001',
                 'expired_date'=>date('Y-m-d'),
-                'dept'=>$request['dept'],
+                'dept'=>'ASALAN',//$request['dept'],
                 'latitude'=>'latitudes',
                 'longitude'=>'longitude'
                 // 'latitude'=>$request['latitude'],
