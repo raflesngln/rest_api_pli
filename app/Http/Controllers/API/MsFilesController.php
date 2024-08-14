@@ -143,10 +143,8 @@ class MsFilesController extends Controller
                 'table_code'=>'FL001',
                 'expired_date'=>date('Y-m-d'),
                 'dept'=>$request['dept'],
-                // 'file_latitude'=>'latitudes',
-                // 'file_longitude'=>'longitude'
-                'file_latitude'=>$request['latitude'],
-                'file_longitude'=>$request['longitude']
+                'latitude'=>$request['latitude'],
+                'longitude'=>$request['longitude']
             ]);
             $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'private']);
     
