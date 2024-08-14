@@ -100,7 +100,7 @@ class OceanExportController extends Controller
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
                     'last_status'=>$get_status?$get_status->tracking_name:'Job Baru',
                     'group_name'=>$get_status?$get_status->group_name:'',
-                    'done_tracking'=>$check_status_gcy?$check_status_gcy->created_datetime:'',
+                    'done_tracking'=>$check_status_gcy?date('H:i:s',$check_status_gcy->created_datetime):'',
                 );
                 $arr[]=$data;
             }
