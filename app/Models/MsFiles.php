@@ -41,8 +41,6 @@ class MsFiles extends Model
         'longitude',
     ];
 
-
-
     /**
      * The attributes that should be hidden for serialization.
      *

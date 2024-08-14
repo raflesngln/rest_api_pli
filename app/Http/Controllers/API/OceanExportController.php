@@ -67,6 +67,15 @@ class OceanExportController extends Controller
                             ->orderBy('pid', 'desc')
                             ->limit(1)
                             ->first();
+                // check status GATE IN CY, if exists then get created datetime for count down
+                $check_status_gcy = DB::table('tr_shipment_status as a')
+                                    ->join('ms_tracking as b', 'a.id_tracking', '=', 'b.id_tracking')
+                                    ->select('b.code', 'a.created_datetime', 'a.id_job')
+                                    ->where('a.id_job', $id_job)
+                                    ->where('a.is_deleted', 0)
+                                    ->where('b.code', 'GCY')
+                                    ->first();
+                    
                 $data=array(
                     'driver'=>$row->driver,
                     'driver_name'=>$row->driver_name,
@@ -91,6 +100,7 @@ class OceanExportController extends Controller
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
                     'last_status'=>$get_status?$get_status->tracking_name:'Job Baru',
                     'group_name'=>$get_status?$get_status->group_name:'',
+                    'done_tracking'=>$check_status_gcy?$check_status_gcy->created_datetime:'',
                 );
                 $arr[]=$data;
             }
