@@ -75,7 +75,7 @@ class OceanExportController extends Controller
                                     ->where('a.is_deleted', 0)
                                     ->where('b.code', 'GCY')
                                     ->first();
-                // $expired_time=$check_status_gcy->created_datetime?$check_status_gcy->created_datetime:"";
+                $expired_time=$check_status_gcy?strtotime($check_status_gcy->created_datetime):"";
                     
                 $data=array(
                     'driver'=>$row->driver,
@@ -101,7 +101,7 @@ class OceanExportController extends Controller
                     'scheduled_stuffing'=>$row->scheduled_stuffing,
                     'last_status'=>$get_status?$get_status->tracking_name:'Job Baru',
                     'group_name'=>$get_status?$get_status->group_name:'',
-                    'done_tracking'=>$check_status_gcy
+                    'done_tracking'=>($expired_time=='')?'':date("H:i:s",$expired_time)
                     // 'done_tracking'=>($expired_time=="")?'':date('H:i:s', $expired_time)
                     // 'done_tracking'=>$check_status_gcy?$check_status_gcy->created_datetime:'',
                 );
