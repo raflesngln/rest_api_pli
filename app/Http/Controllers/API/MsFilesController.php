@@ -125,7 +125,7 @@ class MsFilesController extends Controller
                 'modul'=>$request['modul'],
                 'pi_table'=>$request['pi_table'],
                 // 'id_file'=>$id_file,
-                'id_file'=>'FLOOO002',
+                'id_file'=>'FLOOO00.2',
                 'file_name'=>$filename,
                 'subject'=>$request['subject'],
                 'description'=>$request['description'],
