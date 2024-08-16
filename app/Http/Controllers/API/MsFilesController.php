@@ -110,9 +110,9 @@ class MsFilesController extends Controller
                 $new_pid="FL001".date('YmdHis').$pid_last;
                 $id_file="FL001".date('Ymd').$pid_last;
 
-                $result_pid_new = DB::raw('SELECT f_generate_pid("FL001") AS PID');
-                $result_pid_file = DB::raw('SELECT f_generate_id("FL001") AS ID');
-    
+                $pid_generate_func = DB::select('SELECT f_generate_pid("FL001") AS PID');
+                $id_generated_func = DB::select('SELECT f_generate_id("FL001") AS ID');
+
             $validator = Validator::make($request->all(), [
                 'modul' => 'required|string',
                 'pi_table' => 'required|string',
@@ -123,13 +123,12 @@ class MsFilesController extends Controller
             }
     
             $ms_files = MsFiles::create([
-                'pid'=>$new_pid,
-                // 'pid'=>$result_pid_new->PID,
+                // 'pid'=>$new_pid,
+                'pid'=>$pid_generate_func[0]->PID,
                 'modul'=>$request['modul'],
                 'pi_table'=>$request['pi_table'],
-                // 'id_file'=>$id_file,
-                'id_file'=>'FLOOO002',
-                // 'id_file'=>$result_pid_file->ID,
+                // 'id_file'=>'FLOOO002',
+                'id_file'=>$id_generated_func[0]->ID,
                 'file_name'=>$filename,
                 'subject'=>$request['subject'],
                 'description'=>$request['description'],
@@ -151,31 +150,8 @@ class MsFilesController extends Controller
                 'longitude'=>$request['longitude']
             ]);
             $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'private']);
-    
+            $save = "";
             $status_upload="";
-            // // Get the S3 client from the Laravel storage disk
-            // $s3Client = Storage::disk('s3')->getDriver()->getAdapter()->getClient();
-            // // Define the bucket name and file path
-            // $bucket = 'transys-dev';
-            // $key = 'tracking-mobile/ocean/' . $newPath . '/' . $filename;
-            // // Upload the file with server-side encryption
-            // $result = $s3Client->putObject([
-            //     'Bucket' => $bucket,
-            //     'Key' => $key,
-            //     'SourceFile' => $fileData->getPathname(),
-            //     'ACL' => 'private',
-            //     'ServerSideEncryption' => 'aws:kms'
-            // ]);
-            // // Check the result if needed
-            // if ($result) {
-            //     // File uploaded successfully
-            //     $status_upload="Skses";
-            // } else {
-            //     // Handle the error
-            //     $status_upload="ERROR";
-            // }
-            // $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'public-read']);
-            // json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $fileData)); // get response upload name path
             $response = [
                 // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
                 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
