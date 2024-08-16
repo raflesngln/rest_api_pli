@@ -109,7 +109,9 @@ class MsFilesController extends Controller
                 $pid_last = str_pad((int)$cek_id->nomor_pid + 1, strlen($cek_id->nomor_pid), '0', STR_PAD_LEFT);
                 $new_pid="FL001".date('YmdHis').$pid_last;
                 $id_file="FL001".date('Ymd').$pid_last;
-    
+
+                $result_pid_new = DB::raw('SELECT f_generate_pid("FL001") AS PID');
+                $result_pid_file = DB::raw('SELECT f_generate_id("FL001") AS ID');
     
             $validator = Validator::make($request->all(), [
                 'modul' => 'required|string',
@@ -121,11 +123,13 @@ class MsFilesController extends Controller
             }
     
             $ms_files = MsFiles::create([
-                'pid'=>$new_pid,
+                // 'pid'=>$new_pid,
+                'pid'=>$result_pid_new->PID,
                 'modul'=>$request['modul'],
                 'pi_table'=>$request['pi_table'],
                 // 'id_file'=>$id_file,
-                'id_file'=>'FLOOO00.2',
+                // 'id_file'=>'FLOOO002',
+                'id_file'=>$result_pid_file->ID,
                 'file_name'=>$filename,
                 'subject'=>$request['subject'],
                 'description'=>$request['description'],
