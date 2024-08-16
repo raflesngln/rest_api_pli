@@ -123,13 +123,13 @@ class MsFilesController extends Controller
             }
     
             $ms_files = MsFiles::create([
-                // 'pid'=>$new_pid,
-                'pid'=>$result_pid_new->PID,
+                'pid'=>$new_pid,
+                // 'pid'=>$result_pid_new->PID,
                 'modul'=>$request['modul'],
                 'pi_table'=>$request['pi_table'],
                 // 'id_file'=>$id_file,
-                // 'id_file'=>'FLOOO002',
-                'id_file'=>$result_pid_file->ID,
+                'id_file'=>'FLOOO002',
+                // 'id_file'=>$result_pid_file->ID,
                 'file_name'=>$filename,
                 'subject'=>$request['subject'],
                 'description'=>$request['description'],
