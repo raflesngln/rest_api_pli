@@ -21,6 +21,7 @@ class TrsTrackingTruckController extends Controller
         $this->middleware('auth:sanctum');
         $this->OBS = $obs;
         // $this->ObsstorageService = $ObsstorageService;
+        date_default_timezone_set('Asia/Jakarta');
     }
 /**
  * List Data Tracking Trucks

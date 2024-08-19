@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class StatusTrackingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        date_default_timezone_set('Asia/Jakarta');
+    }
     /**
      * Display a listing of the resource.
      */

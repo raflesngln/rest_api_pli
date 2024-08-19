@@ -22,6 +22,7 @@ class MsDriverController extends Controller
     {
         $this->middleware('auth:sanctum');
         $this->ObsstorageService = $ObsstorageService;
+        date_default_timezone_set('Asia/Jakarta');
     }
 
 /**

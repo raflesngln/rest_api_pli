@@ -25,6 +25,7 @@ class MsFilesController extends Controller
         $this->middleware('auth:sanctum');
         $this->OBS = $obs;
         // $this->ObsstorageService = $ObsstorageService;
+        date_default_timezone_set('Asia/Jakarta');
     }
      public function index(Request $request)
     {
@@ -123,12 +124,12 @@ class MsFilesController extends Controller
             }
     
             $ms_files = MsFiles::create([
-                'pid'=>$new_pid,
-                // 'pid'=>$pid_generate_func[0]->PID,
+                // 'pid'=>$new_pid,
+                'pid'=>$pid_generate_func[0]->PID,
                 'modul'=>$request['modul'],
                 'pi_table'=>$request['pi_table'],
-                'id_file'=>$id_file,
-                // 'id_file'=>$id_generated_func[0]->ID,
+                // 'id_file'=>'FLOOO002',
+                'id_file'=>$id_generated_func[0]->ID,
                 'file_name'=>$filename,
                 'subject'=>$request['subject'],
                 'description'=>$request['description'],
@@ -150,13 +151,16 @@ class MsFilesController extends Controller
                 'longitude'=>$request['longitude']
             ]);
             $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'private']);
-            $save = "";
+    
             $status_upload="";
+            // json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $fileData)); // get response upload name path
             $response = [
                 // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
                 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
                 'message' => 'Success create data',
-                'status_upload_files'=>$save
+                'status_upload_files'=>$save,
+                'pid_generate_func'=>$pid_generate_func[0]->PID,
+                'id_generated_func'=>$id_generated_func[0]->ID,
             ];
     
             return response()->json(['data'=>$response,'file'=>'upload','status_upload'=>$status_upload], 201);

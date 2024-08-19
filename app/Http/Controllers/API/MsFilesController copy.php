@@ -24,6 +24,7 @@ class MsFilesController extends Controller
         $this->middleware('auth:sanctum');
         $this->OBS = $obs;
         // $this->ObsstorageService = $ObsstorageService;
+        date_default_timezone_set('Asia/Jakarta');
     }
      public function index(Request $request)
     {
