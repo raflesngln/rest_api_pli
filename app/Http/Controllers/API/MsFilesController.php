@@ -152,7 +152,6 @@ class MsFilesController extends Controller
             ]);
             $save = Storage::disk('s3')->putFileAs('tracking-mobile/ocean/'.$newPath, $fileData, $filename,['ACL' => 'private']);
     
-            $status_upload="";
             // json_decode($this->OBS->uploadFile('tracking-mobile/ocean/'.$filename, $fileData)); // get response upload name path
             $response = [
                 // 'ms_files' => new MsFilesResource($ms_files), // Use the resource here
@@ -163,7 +162,7 @@ class MsFilesController extends Controller
                 'id_generated_func'=>$id_generated_func[0]->ID,
             ];
     
-            return response()->json(['data'=>$response,'file'=>'upload','status_upload'=>$status_upload], 201);
+            return response()->json(['data'=>$response,'file'=>'upload'], 201);
         } catch (\Exception $e) {
             // Catch and log any exceptions
            Log::error('Error saving file to S3:', ['error' => $e->getMessage()]);
