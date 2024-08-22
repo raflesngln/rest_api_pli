@@ -21,3 +21,4 @@ composer.lock
 storage/.DS_Store
 .DS_Store
 /*.DS_Store
+.env copy
