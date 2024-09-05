@@ -90,6 +90,7 @@ class OceanExportController extends Controller
                     'driver_name'=>$row->driver_name,
                     'email'=>$row->email,
                     'container_number'=>$row->container_number,
+                    'seal_number'=>$row->seal_number,
                     'id_job'=>$row->id_job,
                     'do_number'=>$row->do_number,
                     'pickup_loc'=>$row->pickup_loc,
