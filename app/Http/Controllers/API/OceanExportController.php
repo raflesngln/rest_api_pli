@@ -52,8 +52,8 @@ class OceanExportController extends Controller
                 $query->where('job_shipment_status.do_number', 'like', "%".$search."%");
                 
                 $query->where('job_shipment_status.do_number', 'like', $search."%")
-                        ->orWhere('job_shipment_status.shipper_name', 'like', $search."%")
-                        ->orWhere('job_shipment_status.id_job', 'like',$search."%");
+                    ->orWhere('job_shipment_status.shipper_name', 'like', $search."%")
+                    ->orWhere('job_shipment_status.id_job', 'like',$search."%");
             }
             if ($head_driver == '0') {
                 $query->where('job_shipment_status.email', '=', $email);
