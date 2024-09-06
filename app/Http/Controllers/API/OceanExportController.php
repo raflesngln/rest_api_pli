@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\OceanExportResource;
 use App\Models\TrsTrackingTruck;
 use App\Models\OceanExport;
+use App\Models\MContainerDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -86,6 +87,7 @@ class OceanExportController extends Controller
                                     ->first();
                     
                 $data=array(
+                    'id'=>$row->id,
                     'driver'=>$row->driver,
                     'driver_name'=>$row->driver_name,
                     'email'=>$row->email,
@@ -181,7 +183,7 @@ class OceanExportController extends Controller
     {
 
             $query = DB::table('job_shipment_status')
-            ->select('job_shipment_status.*');
+            ->select('*');
 
             if ($id !== '') {
                 $query->where('job_shipment_status.id_job', '=', $id);
@@ -220,6 +222,19 @@ class OceanExportController extends Controller
             }
 
         return response()->json(['data' => $results,'id_job'=>$id,'files'=>$data_files], 200);
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function update_container_detail(Request $request, string $id)
+    {
+            $resp = MContainerDetail::where('id', $id)->first();
+            if (!$resp) {
+                return response()->json(['message' => 'Data not found'], 404);
+            }
+    
+            $resp->update($request->all());
+            return response()->json(['data'=>$resp,'message'=>'success update data'],200);
     }
     public function show_test(Request $request, string $id)
     {
@@ -330,7 +345,53 @@ class OceanExportController extends Controller
     {
         //
     }
+ /**
+     * Display the specified resource.
+     */
+    public function update_header_jobs(Request $request, string $id)
+    {
 
+            $query = DB::table('job_shipment_status')
+            ->select('job_shipment_status.*');
+
+            if ($id !== '') {
+                $query->where('job_shipment_status.id_job', '=', $id);
+            }
+            $results = $query->first();
+            $pi_table=$results->pi_table;
+            $files_data = DB::table('ms_files')
+                        ->select('*')
+                        ->where('pi_table', '=', $pi_table)
+                        ->where('is_deleted', '=', 0)
+                        ->get();
+            $data_files=[];
+            foreach($files_data as $row){
+                $fileName=$row->file_name;
+                // $pi_table=$row->pi_table;
+                $temporaryUrl = Storage::disk('s3')->temporaryUrl(
+                    'tracking-mobile/ocean/' . $pi_table . '/' . $fileName, 
+                    now()->addMinutes(5)
+                );
+
+                $list=array(
+                    'pid'=>$row->pid,
+                    'pi_table'=>$row->pi_table,
+                    'id_file'=>$row->id_file,
+                    'file_name'=>$row->file_name,
+                    'attachment'=>$temporaryUrl,
+                    'modul'=>$row->modul,
+                    'subject'=>$row->subject,
+                    'created_by'=>$row->created_by,
+                    'created_datetime'=>$row->created_datetime,
+                    'is_active'=>$row->is_active,
+                    'description'=>$row->description
+                );
+                $data_files[]=$list;
+
+            }
+
+        return response()->json(['data' => $results,'id_job'=>$id,'files'=>$data_files], 200);
+    }
     /**
      * Remove the specified resource from storage.
      */
